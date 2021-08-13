@@ -1,5 +1,5 @@
 import * as React from "react"
-
+/*
 // styles
 const pageStyles = {
   color: "#232129",
@@ -179,6 +179,13 @@ const IndexPage = () => {
       />
     </main>
   )
+}
+*/
+
+import Products from "./Products"
+
+const IndexPage = () => {
+  return <Products />
 }
 
 export default IndexPage
