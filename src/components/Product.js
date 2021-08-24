@@ -26,7 +26,7 @@ export default function Product(props) {
           component="img"
           alt={props.name}
           height="140"
-          image={props.imageUrl}
+          image={props.coverImage}
           title={props.name}
         />
         <CardContent>
@@ -39,7 +39,7 @@ export default function Product(props) {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary" onClick={() => navigate('ProductInfo')}>
+        <Button size="small" color="primary" onClick={() => navigate('product/' + props.id)}>
           More info
         </Button>
       </CardActions>

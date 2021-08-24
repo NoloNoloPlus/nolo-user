@@ -3,6 +3,7 @@ import Product from "../components/Product"
 import Header from "../components/Header"
 import { Box } from "@material-ui/core"
 import { useQueryParam, StringParam } from "use-query-params";
+import config from "../config";
 
 // Messo solo per avere dei dati
 const initialProducts = [
@@ -13,6 +14,8 @@ const initialProducts = [
     }
 ]
 
+const truncate = (input, maxLength) => input.length > maxLength ? `${input.substring(0, maxLength - 3)}...` : input;
+
 const Products = ({location}) => {
     const [products, setProducts] = useState(initialProducts)
     // Use this to handle search queries
@@ -20,7 +23,34 @@ const Products = ({location}) => {
 
     useEffect(() => {
         // TODO: Qui è dove dovresti prendere i prodotti
-    })
+        fetch(config.api_endpoint + '/products?keywords=' + (query || ''), {
+            headers: {
+                pragma: 'no-cache',
+                'cache-control' : 'no-cache'
+            }
+        })
+            .then((response) => {
+                return response.json()
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+            .then((parsedResponse) => {
+                const parsedProducts = parsedResponse.results;
+                console.log(parsedResponse)
+                const newProducts = [];
+                for (let parsedProduct of parsedProducts) {
+                    newProducts.push({
+                        name: parsedProduct.name,
+                        id: parsedProduct.id,
+                        blurb: truncate(parsedProduct.description, 50),
+                        coverImage: parsedProduct.coverImage
+                    })
+                }
+
+                setProducts(newProducts);
+            })
+    }, [query])
 
     return (
         <Box>
@@ -28,7 +58,7 @@ const Products = ({location}) => {
             <Box>
             {
                 products.map((product, index) => 
-                    <Product name={product.name} imageUrl={product.imageUrl} blurb={product.blurb} key={'product' + index}/>
+                    <Product name={product.name} coverImage={product.coverImage} blurb={product.blurb} id={product.id} key={'product' + index}/>
                 )
             }
             </Box>
