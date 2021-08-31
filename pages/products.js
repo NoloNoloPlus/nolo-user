@@ -2,8 +2,8 @@ import React, {useEffect, useState} from "react"
 import Product from "../components/Product"
 import Header from "../components/Header"
 import { Box } from "@material-ui/core"
-import { useQueryParam, StringParam } from "use-query-params";
-import config from "../config";
+import config from "../config"
+import { useRouter } from 'next/router'
 
 // Messo solo per avere dei dati
 const initialProducts = [
@@ -16,14 +16,14 @@ const initialProducts = [
 
 const truncate = (input, maxLength) => input.length > maxLength ? `${input.substring(0, maxLength - 3)}...` : input;
 
-const Products = ({location}) => {
+const Products = () => {
+    const router = useRouter();
     const [products, setProducts] = useState(initialProducts)
     // Use this to handle search queries
-    const [query, setQuery] = useQueryParam('q', StringParam)
 
     useEffect(() => {
         // TODO: Qui è dove dovresti prendere i prodotti
-        fetch(config.api_endpoint + '/products?keywords=' + (query || ''), {
+        fetch(config.api_endpoint + '/products?keywords=' + (router.query.q || ''), {
             headers: {
                 pragma: 'no-cache',
                 'cache-control' : 'no-cache'
@@ -50,7 +50,7 @@ const Products = ({location}) => {
 
                 setProducts(newProducts);
             })
-    }, [query])
+    }, [router.query.q])
 
     return (
         <Box>

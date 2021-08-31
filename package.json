@@ -1,26 +1,26 @@
 {
-  "name": "nolo-user",
-  "version": "1.0.0",
+  "name": "nolo-user-next",
+  "version": "0.1.0",
   "private": true,
-  "description": "nolo-user",
-  "author": "Samuele Marro",
-  "keywords": [
-    "gatsby"
-  ],
   "scripts": {
-    "develop": "gatsby develop",
-    "start": "gatsby develop",
-    "build": "gatsby build",
-    "serve": "gatsby serve",
-    "clean": "gatsby clean"
+    "dev": "next dev -p 8000",
+    "build": "next build && next export",
+    "start": "next start -p 8000",
+    "lint": "next lint"
   },
   "dependencies": {
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
-    "gatsby": "^3.10.2",
-    "gatsby-plugin-use-query-params": "^1.0.1",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "use-query-params": "^1.2.3"
+    "imagemin-mozjpeg": "^9.0.0",
+    "imagemin-optipng": "^8.0.0",
+    "next": "^11.1.0",
+    "next-compose-plugins": "^2.2.1",
+    "next-optimized-images": "^2.6.2",
+    "react": "17.0.2",
+    "react-dom": "17.0.2"
+  },
+  "devDependencies": {
+    "eslint": "7.32.0",
+    "eslint-config-next": "11.1.0"
   }
 }

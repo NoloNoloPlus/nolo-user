@@ -8,8 +8,7 @@ import { alpha, makeStyles } from '@material-ui/core/styles';
 import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import { Button } from '@material-ui/core';
-
-import { navigate } from 'gatsby';
+import { useRouter } from 'next/router'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,14 +66,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Header(props) {
+  const router = useRouter();
   const classes = useStyles();
 
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState(router.query.q || '')
 
   const executeSearch = (event) => {
     event.preventDefault()
     console.log('Searching')
-    navigate('/?q=' + encodeURI(search))
+    router.push('/?q=' + encodeURI(search))
   }
 
   return (
@@ -98,7 +98,7 @@ export default function Header(props) {
               />
             </form>
           </div>
-          {props.showLogin ? <Button color="inherit" onClick={() => navigate('/SignIn')}>Login</Button> : <></>}
+          {props.showLogin ? <Button color="inherit" onClick={() => router.push('/signin')}>Login</Button> : <></>}
         </Toolbar>
       </AppBar>
     </div>
