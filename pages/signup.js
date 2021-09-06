@@ -14,6 +14,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Copyright from '../components/Copyright';
 import { useRouter } from 'next/router'
+import { FormInputText } from '../components/form-elements';
+import { useForm } from "react-hook-form";
+import config from "../config";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,9 +38,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const defaultValues = {
+  name: "",
+  email: "",
+  password: ""
+};
+
 export default function SignUp() {
   const router = useRouter();
   const classes = useStyles();
+  const methods = useForm({ defaultValues: defaultValues });
+  const { handleSubmit, reset, control, setValue, watch } = methods;
+
+  const register = (data) => {
+    fetch(config.api_endpoint + '/auth/register', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: data.name,
+        email: data.email,
+        password: data.password
+      })
+    })
+    .then((response) => response.json())
+    .then((parsedResponse) => {
+      console.log('Parsed response: ', parsedResponse)
+      router.push('/')
+    })
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -49,33 +80,20 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                autoComplete="fname"
-                name="firstName"
+        <Container>
+        <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <FormInputText
+                name="name"
+                control={control}
+                label="Name"
                 variant="outlined"
                 required
                 fullWidth
-                id="firstName"
-                label="First Name"
-                autoFocus
-              />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="lastName"
-                label="Last Name"
-                name="lastName"
-                autoComplete="lname"
-              />
+                id="name"/>
             </Grid>
             <Grid item xs={12}>
-              <TextField
+              <FormInputText
                 variant="outlined"
                 required
                 fullWidth
@@ -83,10 +101,11 @@ export default function SignUp() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                control={control}
               />
             </Grid>
             <Grid item xs={12}>
-              <TextField
+              <FormInputText
                 variant="outlined"
                 required
                 fullWidth
@@ -95,16 +114,16 @@ export default function SignUp() {
                 type="password"
                 id="password"
                 autoComplete="current-password"
+                control={control}
               />
             </Grid>
           </Grid>
           <Button
-            type="submit"
-            fullWidth
+            onClick={handleSubmit(register)}
             variant="contained"
+            fullWidth
             color="primary"
-            className={classes.submit}
-          >
+            className={classes.submit}>
             Sign Up
           </Button>
           <Grid container justifyContent="flex-end">
@@ -114,7 +133,8 @@ export default function SignUp() {
               </Link>
             </Grid>
           </Grid>
-        </form>
+        </Container>
+        
       </div>
       <Box mt={5}>
         <Copyright />

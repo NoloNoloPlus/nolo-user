@@ -13,7 +13,10 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Copyright from '../components/Copyright';
-import { useRouter } from 'next/router'
+import { useRouter } from 'next/router';
+import { FormInputText, FormInputCheckbox } from '../components/form-elements'
+import { useForm } from "react-hook-form";
+import config from "../config";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,9 +38,37 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const defaultValues = {
+  email: "",
+  password: "",
+  remember: true
+};
+
 export default function SignIn() {
   const router = useRouter();
   const classes = useStyles();
+  const methods = useForm({ defaultValues: defaultValues });
+  const { handleSubmit, reset, control, setValue, watch } = methods;
+
+  const login = (data) => {
+    fetch(config.api_endpoint + '/auth/login', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: data.email,
+        password: data.password
+      })
+    })
+    .then((response) => response.json())
+    .then((parsedResponse) => {
+      // TODO: Check if the response was successful
+      console.log('Parsed response: ', parsedResponse)
+      router.push('/')
+    })
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -49,8 +80,8 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
+        <Container>
+          <FormInputText
             variant="outlined"
             margin="normal"
             required
@@ -59,9 +90,9 @@ export default function SignIn() {
             label="Email Address"
             name="email"
             autoComplete="email"
-            autoFocus
+            control={control}
           />
-          <TextField
+          <FormInputText
             variant="outlined"
             margin="normal"
             required
@@ -71,17 +102,16 @@ export default function SignIn() {
             type="password"
             id="password"
             autoComplete="current-password"
+            control={control}
           />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
+          <FormInputCheckbox name="remember" control={control} label="Remember me"/>
           <Button
             type="submit"
             fullWidth
             variant="contained"
             color="primary"
             className={classes.submit}
+            onClick={handleSubmit(login)}
           >
             Sign In
           </Button>
@@ -97,7 +127,7 @@ export default function SignIn() {
               </Link>
             </Grid>
           </Grid>
-        </form>
+        </Container>
       </div>
       <Box mt={8}>
         <Copyright />
