@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -19,7 +19,7 @@ import { useForm } from "react-hook-form";
 import config from "../config";
 import { jwtAccessState, jwtRefreshState, userIdState } from '../common/auth';
 import { useSetRecoilState } from 'recoil';
-import { schemas } from '../common';
+import { schemas, utils } from '../common';
 import { RouteLink } from '../components';
 import { joiResolver } from '@hookform/resolvers/joi';
 
@@ -59,7 +59,10 @@ export default function SignIn() {
   const setJwtRefresh = useSetRecoilState(jwtRefreshState);
   const setUserId = useSetRecoilState(userIdState);
 
+  const [serverError, setServerError] = useState(null)
+
   const login = (data) => {
+    setServerError(null);
     fetch(config.api_endpoint + '/auth/login', {
       method: 'POST',
       headers: {
@@ -71,17 +74,28 @@ export default function SignIn() {
         password: data.password
       })
     })
-    .then((response) => response.json())
-    .then((parsedResponse) => {
-      // TODO: Check if the response was successful
-
-      console.log('Parsed response: ', parsedResponse);
-      setJwtAccess(parsedResponse.tokens.access.token);
-      setJwtRefresh(parsedResponse.tokens.refresh.token);
-      setUserId(parsedResponse.user.id);
-
-      router.push(redirect || '/')
+    .then((response) => {
+      if (utils.success(response)) {
+        response.json()
+          .then((parsedResponse) => {
+            // TODO: Check if the response was successful
+      
+            console.log('Parsed response: ', parsedResponse);
+            setJwtAccess(parsedResponse.tokens.access.token);
+            setJwtRefresh(parsedResponse.tokens.refresh.token);
+            setUserId(parsedResponse.user.id);
+      
+            router.push(redirect || '/')
+          });
+      }
+      else {
+        response.json()
+          .then((parsedError) => {
+            setServerError(parsedError);
+          });
+      }
     })
+    
   }
 
   const getRedirect = () => redirect ? `?redirect=${redirect}` : ''
@@ -133,6 +147,7 @@ export default function SignIn() {
           >
             Sign In
           </Button>
+          {serverError ? <Typography>Error: {serverError.message}</Typography> : <></>}
           <Grid container>
             <Grid item xs>
               <Link variant="body2">

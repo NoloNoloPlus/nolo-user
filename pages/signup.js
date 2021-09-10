@@ -1,4 +1,4 @@
-import React from 'react';
+import { React, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -19,7 +19,7 @@ import { useForm } from "react-hook-form";
 import config from "../config";
 import { RouteLink } from '../components';
 import { useSetRecoilState } from 'recoil';
-import { schemas } from '../common';
+import { schemas, utils } from '../common';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { jwtAccessState, jwtRefreshState, userIdState } from '../common/auth';
 
@@ -59,6 +59,8 @@ export default function SignUp() {
   const setJwtRefresh = useSetRecoilState(jwtRefreshState);
   const setUserId = useSetRecoilState(userIdState);
 
+  const [serverError, setServerError] = useState(null)
+
   const register = (data) => {
     fetch(config.api_endpoint + '/auth/register', {
       method: 'POST',
@@ -72,7 +74,27 @@ export default function SignUp() {
         password: data.password
       })
     })
-    .then((response) => response.json())
+    .then((response) => {
+      if (utils.success(response)) {
+        response.json()
+          .then((parsedResponse) => {
+            // TODO: Check if the response was successful
+      
+            console.log('Parsed response: ', parsedResponse);
+            setJwtAccess(parsedResponse.tokens.access.token);
+            setJwtRefresh(parsedResponse.tokens.refresh.token);
+            setUserId(parsedResponse.user.id);
+      
+            router.push(redirect || '/')
+          });
+      }
+      else {
+        response.json()
+          .then((parsedError) => {
+            setServerError(parsedError);
+          });
+      }
+    })
     .then((parsedResponse) => {
       console.log('Parsed response: ', parsedResponse);
       setJwtAccess(parsedResponse.tokens.access.token);
@@ -143,6 +165,7 @@ export default function SignUp() {
             className={classes.submit}>
             Sign Up
           </Button>
+          {serverError ? <Typography>Error: {serverError.message}</Typography> : <></>}
           <Grid container justifyContent="flex-end">
             <Grid item>
               <RouteLink href={'/signin' + getRedirect()} variant="body2">
