@@ -22,34 +22,33 @@ const Products = () => {
     // Use this to handle search queries
 
     useEffect(() => {
-        // TODO: Qui è dove dovresti prendere i prodotti
         fetch(config.api_endpoint + '/products?keywords=' + (router.query.q || ''), {
             headers: {
                 pragma: 'no-cache',
                 'cache-control' : 'no-cache'
             }
         })
-            .then((response) => {
-                return response.json()
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-            .then((parsedResponse) => {
-                const parsedProducts = parsedResponse.results;
-                console.log(parsedResponse)
-                const newProducts = [];
-                for (let parsedProduct of parsedProducts) {
-                    newProducts.push({
-                        name: parsedProduct.name,
-                        id: parsedProduct.id,
-                        blurb: truncate(parsedProduct.description, 50),
-                        coverImage: parsedProduct.coverImage
-                    })
-                }
+        .then((response) => {
+            return response.json()
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+        .then((parsedResponse) => {
+            const parsedProducts = parsedResponse.results;
+            console.log(parsedResponse)
+            const newProducts = [];
+            for (let parsedProduct of parsedProducts) {
+                newProducts.push({
+                    name: parsedProduct.name,
+                    id: parsedProduct.id,
+                    blurb: truncate(parsedProduct.description, 50),
+                    coverImage: parsedProduct.coverImage
+                })
+            }
 
-                setProducts(newProducts);
-            })
+            setProducts(newProducts);
+        })
     }, [router.query.q])
 
     return (

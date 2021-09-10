@@ -19,6 +19,9 @@ import { useForm } from "react-hook-form";
 import config from "../config";
 import { RouteLink } from '../components';
 import { useSetRecoilState } from 'recoil';
+import { schemas } from '../common';
+import { joiResolver } from '@hookform/resolvers/joi';
+import { jwtAccessState, jwtRefreshState, userIdState } from '../common/auth';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -49,8 +52,8 @@ const defaultValues = {
 export default function SignUp() {
   const router = useRouter();
   const classes = useStyles();
-  const methods = useForm({ defaultValues: defaultValues });
-  const { handleSubmit, reset, control, setValue, watch } = methods;
+  const methods = useForm({ defaultValues: defaultValues, resolver: joiResolver(schemas.signup), mode: 'onChange' });
+  const { handleSubmit, control, formState: { errors } } = methods;
   const { redirect } = router.query;
   const setJwtAccess = useSetRecoilState(jwtAccessState);
   const setJwtRefresh = useSetRecoilState(jwtRefreshState);
@@ -102,6 +105,7 @@ export default function SignUp() {
                 required
                 fullWidth
                 id="name"/>
+              <Typography>{errors.name?.message}</Typography>
             </Grid>
             <Grid item xs={12}>
               <FormInputText
@@ -114,6 +118,7 @@ export default function SignUp() {
                 autoComplete="email"
                 control={control}
               />
+              <Typography>{errors.email?.message}</Typography>
             </Grid>
             <Grid item xs={12}>
               <FormInputText
@@ -127,6 +132,7 @@ export default function SignUp() {
                 autoComplete="current-password"
                 control={control}
               />
+              <Typography>{errors.password?.message}</Typography>
             </Grid>
           </Grid>
           <Button

@@ -19,8 +19,9 @@ import { useForm } from "react-hook-form";
 import config from "../config";
 import { jwtAccessState, jwtRefreshState, userIdState } from '../common/auth';
 import { useSetRecoilState } from 'recoil';
-import { utils } from '../common';
+import { schemas } from '../common';
 import { RouteLink } from '../components';
+import { joiResolver } from '@hookform/resolvers/joi';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -51,8 +52,8 @@ const defaultValues = {
 export default function SignIn() {
   const router = useRouter();
   const classes = useStyles();
-  const methods = useForm({ defaultValues: defaultValues });
-  const { handleSubmit, reset, control, setValue, watch } = methods;
+  const methods = useForm({ defaultValues: defaultValues, resolver: joiResolver(schemas.login), mode: 'onChange'});
+  const { handleSubmit, control, formState: { errors } } = methods;
   const { redirect } = router.query;
   const setJwtAccess = useSetRecoilState(jwtAccessState);
   const setJwtRefresh = useSetRecoilState(jwtRefreshState);
@@ -107,6 +108,7 @@ export default function SignIn() {
             autoComplete="email"
             control={control}
           />
+          <Typography>{errors.email?.message}</Typography>
           <FormInputText
             variant="outlined"
             margin="normal"
@@ -119,6 +121,7 @@ export default function SignIn() {
             autoComplete="current-password"
             control={control}
           />
+          <Typography>{errors.password?.message}</Typography>
           <FormInputCheckbox name="remember" control={control} label="Remember me"/>
           <Button
             type="submit"
