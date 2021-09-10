@@ -54,7 +54,6 @@ const Products = () => {
 
     return (
         <Box>
-            <Header showLogin={true}/>
             <Box>
             {
                 products.map((product, index) => 

@@ -17,6 +17,10 @@ import { useRouter } from 'next/router';
 import { FormInputText, FormInputCheckbox } from '../components/form-elements'
 import { useForm } from "react-hook-form";
 import config from "../config";
+import { jwtAccessState, jwtRefreshState, userIdState } from '../common/auth';
+import { useSetRecoilState } from 'recoil';
+import { utils } from '../common';
+import { RouteLink } from '../components';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -49,6 +53,10 @@ export default function SignIn() {
   const classes = useStyles();
   const methods = useForm({ defaultValues: defaultValues });
   const { handleSubmit, reset, control, setValue, watch } = methods;
+  const { redirect } = router.query;
+  const setJwtAccess = useSetRecoilState(jwtAccessState);
+  const setJwtRefresh = useSetRecoilState(jwtRefreshState);
+  const setUserId = useSetRecoilState(userIdState);
 
   const login = (data) => {
     fetch(config.api_endpoint + '/auth/login', {
@@ -65,10 +73,17 @@ export default function SignIn() {
     .then((response) => response.json())
     .then((parsedResponse) => {
       // TODO: Check if the response was successful
-      console.log('Parsed response: ', parsedResponse)
-      router.push('/')
+
+      console.log('Parsed response: ', parsedResponse);
+      setJwtAccess(parsedResponse.tokens.access.token);
+      setJwtRefresh(parsedResponse.tokens.refresh.token);
+      setUserId(parsedResponse.user.id);
+
+      router.push(redirect || '/')
     })
   }
+
+  const getRedirect = () => redirect ? `?redirect=${redirect}` : ''
 
   return (
     <Container component="main" maxWidth="xs">
@@ -117,14 +132,14 @@ export default function SignIn() {
           </Button>
           <Grid container>
             <Grid item xs>
-              <Link href="#" variant="body2">
+              <Link variant="body2">
                 Forgot password?
               </Link>
             </Grid>
             <Grid item>
-              <Link href="#" variant="body2" onClick={() => router.push('/signup')}>
+              <RouteLink href={'/signup' + getRedirect()} variant="body2">
                 {"Don't have an account? Sign Up"}
-              </Link>
+              </RouteLink>
             </Grid>
           </Grid>
         </Container>

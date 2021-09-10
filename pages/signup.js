@@ -17,6 +17,8 @@ import { useRouter } from 'next/router'
 import { FormInputText } from '../components/form-elements';
 import { useForm } from "react-hook-form";
 import config from "../config";
+import { RouteLink } from '../components';
+import { useSetRecoilState } from 'recoil';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -49,6 +51,10 @@ export default function SignUp() {
   const classes = useStyles();
   const methods = useForm({ defaultValues: defaultValues });
   const { handleSubmit, reset, control, setValue, watch } = methods;
+  const { redirect } = router.query;
+  const setJwtAccess = useSetRecoilState(jwtAccessState);
+  const setJwtRefresh = useSetRecoilState(jwtRefreshState);
+  const setUserId = useSetRecoilState(userIdState);
 
   const register = (data) => {
     fetch(config.api_endpoint + '/auth/register', {
@@ -65,10 +71,15 @@ export default function SignUp() {
     })
     .then((response) => response.json())
     .then((parsedResponse) => {
-      console.log('Parsed response: ', parsedResponse)
-      router.push('/')
+      console.log('Parsed response: ', parsedResponse);
+      setJwtAccess(parsedResponse.tokens.access.token);
+      setJwtRefresh(parsedResponse.tokens.refresh.token);
+      setUserId(parsedResponse.user.id);
+      router.push(redirect || '/')
     })
   }
+
+  const getRedirect = () => redirect ? `?redirect=${redirect}` : ''
 
   return (
     <Container component="main" maxWidth="xs">
@@ -128,9 +139,9 @@ export default function SignUp() {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="#" variant="body2" onClick={() => router.push('/signin')}>
+              <RouteLink href={'/signin' + getRedirect()} variant="body2">
                 Already have an account? Sign in
-              </Link>
+              </RouteLink>
             </Grid>
           </Grid>
         </Container>

@@ -9,6 +9,9 @@ import MenuIcon from '@material-ui/icons/Menu';
 import SearchIcon from '@material-ui/icons/Search';
 import { Button } from '@material-ui/core';
 import { useRouter } from 'next/router'
+import { useRecoilState } from 'recoil';
+import { userIdState } from '../common/auth';
+import { utils } from '../common';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -70,12 +73,15 @@ export default function Header(props) {
   const classes = useStyles();
 
   const [search, setSearch] = useState(router.query.q || '')
+  const [userId, setUserId] = useRecoilState(userIdState);
 
   const executeSearch = (event) => {
     event.preventDefault()
     console.log('Searching')
     router.push('/?q=' + encodeURI(search))
   }
+
+  const getRedirect = () => router.pathname == '/' ? '' : '?redirect=' + utils.getPath()
 
   return (
     <div className={classes.root}>
@@ -98,7 +104,7 @@ export default function Header(props) {
               />
             </form>
           </div>
-          {props.showLogin ? <Button color="inherit" onClick={() => router.push('/signin')}>Login</Button> : <></>}
+          {userId ? <></> : <Button color="inherit" onClick={() => router.push('/signin' + getRedirect())}>Login</Button>}
         </Toolbar>
       </AppBar>
     </div>
