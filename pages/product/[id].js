@@ -1,6 +1,5 @@
 import { Box, Button, Link, Typography } from "@material-ui/core"
 import React, { useEffect, useState } from "react"
-import Header from "../../components/Header"
 import { useRouter } from 'next/router'
 import config from "../../config"
 import DateFnsUtils from '@date-io/date-fns'
@@ -152,7 +151,9 @@ export default function ProductInfo() {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
-              'Content-Type': 'application/json'
+              'Content-Type': 'application/json',
+              authorization : jwtAuthorizationHeader(jwtAccess, jwtRefresh, setJwtAccess, setJwtRefresh)
+
             },
             body: JSON.stringify({
                 products: {
@@ -184,7 +185,7 @@ export default function ProductInfo() {
                         {quote ? <Typography>Price: {quote.price}</Typography> : <></>}
                         {quote && quote.instances.length > 1 ? (<Typography>This accomodation requires switching instance mid-rental.</Typography>) : <></>}
                     </Box>
-                ) : <RouteLink variant="body2" href={'/signin?redirect=' + encodeURI(utils.getPath())}>Login to view availability</RouteLink>
+                ) : <RouteLink variant="body2" href={'/signin?redirect='}>Login to view availability</RouteLink>
                 }
                 
             </Box>
