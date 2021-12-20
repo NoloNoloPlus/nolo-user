@@ -39,6 +39,14 @@ export default function ProductInfo() {
         })
     }, [id])
 
+    const dayToUTC = (day) => {
+        const date = day.getDate().toString().padStart(2, '0')
+        const month = (day.getMonth() + 1).toString().padStart(2, '0')
+
+        // Date-only format is parsed as UTC
+        return new Date(Date.parse(`${day.getFullYear()}-${month}-${date}`));
+    }
+
     useEffect(() => {
         if (userId) {
             console.log('AUTH: ', jwtAuthorizationHeader(jwtAccess, jwtRefresh, setJwtAccess, setJwtRefresh))
@@ -54,7 +62,7 @@ export default function ProductInfo() {
                 console.log(parsedResponse)
                 const newAvailability = [];
                 for (let availability of Array.from(parsedResponse)) {
-                    newAvailability.push([new Date(availability[0]), new Date(availability[1])]);
+                    newAvailability.push([dayToUTC(new Date(availability[0])), dayToUTC(new Date(availability[1]))]);
                 }
                 setAvailability(newAvailability);
             })
@@ -90,15 +98,16 @@ export default function ProductInfo() {
     }
 
     const startShouldDisableDate = (day) => {
-        day.setHours(0, 0, 0, 0);
+        day = dayToUTC(day)
         if (!availability) {
             return true;
         }
         if (endDate) {
-            if (day > endDate) {
+            const utcEndDate = dayToUTC(endDate)
+            if (day > utcEndDate) {
                 return true;
             }
-            const allowedRange = dateInRanges(endDate, availability);
+            const allowedRange = dateInRanges(utcEndDate, availability);
             if (!allowedRange) {
                 return true;
             }
@@ -107,7 +116,6 @@ export default function ProductInfo() {
                 return true;
             }
         }
-
 
         const matchingRange = dateInRanges(day, availability);
 
@@ -119,15 +127,16 @@ export default function ProductInfo() {
     }
 
     const endShouldDisableDate = (day) => {
-        day.setHours(0, 0, 0, 0);
+        day = dayToUTC(day)
         if (!availability) {
             return true;
         }
         if (startDate) {
-            if (day < startDate) {
+            const utcStartDate = dayToUTC(startDate)
+            if (day < utcStartDate) {
                 return true;
             }
-            const allowedRange = dateInRanges(startDate, availability);
+            const allowedRange = dateInRanges(utcStartDate, availability);
             if (!allowedRange) {
                 return true;
             }
@@ -147,6 +156,20 @@ export default function ProductInfo() {
     }
 
     const rent = () => {
+        const formattedInstances = {};
+
+        for (const [instanceId, instance] of Object.entries(quote.instances)) {
+            formattedInstances[instanceId] = {
+                dateRanges: []
+            }
+            for (let i = 0; i < instance.dateRanges.length; i++) {
+                formattedInstances[instanceId].dateRanges.push({
+                    from: formatDate(instance.dateRanges[i].from),
+                    to: formatDate(instance.dateRanges[i].to)
+                })
+            }
+        }
+
         fetch(config.api_endpoint + '/rentals/', {
             method: 'POST',
             headers: {
@@ -158,12 +181,11 @@ export default function ProductInfo() {
             body: JSON.stringify({
                 products: {
                     [id]: {
-                        instances: quote.instances
+                        instances: formattedInstances
                     }
                 }
             })
         })
-        
     }
     
     return (
