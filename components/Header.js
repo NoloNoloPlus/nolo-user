@@ -10,7 +10,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import { Button } from '@material-ui/core';
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil';
-import { userIdState } from '../common/auth';
+import { jwtAccessState, jwtRefreshState, userIdState } from '../common/auth';
 import { utils } from '../common';
 
 const useStyles = makeStyles((theme) => ({
@@ -74,6 +74,13 @@ export default function Header(props) {
 
   const [search, setSearch] = useState(router.query.q || '')
   const [userId, setUserId] = useRecoilState(userIdState);
+  const [jwtAccess, setJwtAccess] = useRecoilState(jwtAccessState);
+  const [jwtRefresh, setJwtRefresh] = useRecoilState(jwtRefreshState);
+
+  const logout = () => {
+    setUserId(null);
+    router.push('/');
+  }
 
   const executeSearch = (event) => {
     event.preventDefault()
@@ -81,7 +88,7 @@ export default function Header(props) {
     router.push('/?q=' + encodeURI(search))
   }
 
-  const getRedirect = () => router.pathname == '/' ? '' : '?redirect=' + utils.getPath()
+  const getRedirect = () => router.pathname == '/' ? '' : '?redirect=' 
 
   return (
     <div className={classes.root}>
@@ -104,7 +111,9 @@ export default function Header(props) {
               />
             </form>
           </div>
-          {userId ? <></> : <Button color="inherit" onClick={() => router.push('/signin' + getRedirect())}>Login</Button>}
+          <Button color="inherit" onClick={() => router.push('/')}>Home</Button>
+          {userId ? <Button color="inherit" onClick={() => router.push('/rentals')}>Rentals</Button> : <></>}
+          {userId ? <Button color="inherit" onClick={logout}>Logout</Button> : <Button color="inherit" onClick={() => router.push('/signin' + getRedirect())}>Login</Button>}
         </Toolbar>
       </AppBar>
     </div>
