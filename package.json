@@ -10,12 +10,18 @@
   },
   "dependencies": {
     "@date-io/date-fns": "1.x",
+    "@emotion/react": "^11.7.1",
+    "@emotion/styled": "^11.6.0",
     "@hookform/resolvers": "^2.8.0",
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
     "@material-ui/pickers": "^3.3.10",
+    "@mui/icons-material": "^5.2.4",
+    "@mui/material": "^5.2.4",
+    "@react-pdf/renderer": "^2.0.21",
     "date-fns": "^2.23.0",
     "date-format-parse": "^0.2.7",
+    "file-saver": "^2.0.5",
     "imagemin-mozjpeg": "^9.0.0",
     "imagemin-optipng": "^8.0.0",
     "intersecting-ranges": "^1.2.0",
@@ -26,7 +32,9 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-hook-form": "^7.15.0",
-    "recoil": "^0.4.1"
+    "react-simple-star-rating": "^4.0.0",
+    "recoil": "^0.4.1",
+    "recoil-persist": "^4.0.0"
   },
   "devDependencies": {
     "eslint": "7.32.0",

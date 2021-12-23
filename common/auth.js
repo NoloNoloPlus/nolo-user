@@ -1,19 +1,25 @@
 import { atom, useRecoilState } from 'recoil'
+import { recoilPersist } from 'recoil-persist'
+const { persistAtom } = recoilPersist()
+
 
 
 const jwtAccessState = atom({
   key: 'jwtAccess',
-  default: null
+  default: null,
+  effects_UNSTABLE: [persistAtom]
 })
 
 const jwtRefreshState = atom({
     key: 'jwtRefresh',
-    default: null
+    default: null,
+    effects_UNSTABLE: [persistAtom]
 })
 
 const userIdState = atom({
     key: 'userId',
-    default: null
+    default: null,
+    effects_UNSTABLE: [persistAtom]
 })
 
 const jwtAuthorizationHeader = (jwtAccess, jwtRefresh, setJwtAccess, setJwtRefresh) => {
