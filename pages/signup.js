@@ -44,7 +44,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const defaultValues = {
-  name: "",
+  firstName: "",
+  lastName: "",
   email: "",
   password: ""
 };
@@ -69,7 +70,8 @@ export default function SignUp() {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        name: data.name,
+        firstName: data.firstName,
+        lastName: data.lastName,
         email: data.email,
         password: data.password
       })
@@ -95,13 +97,6 @@ export default function SignUp() {
           });
       }
     })
-    .then((parsedResponse) => {
-      console.log('Parsed response: ', parsedResponse);
-      setJwtAccess(parsedResponse.tokens.access.token);
-      setJwtRefresh(parsedResponse.tokens.refresh.token);
-      setUserId(parsedResponse.user.id);
-      router.push(redirect || '/')
-    })
   }
 
   const getRedirect = () => redirect ? `?redirect=${redirect}` : ''
@@ -120,14 +115,25 @@ export default function SignUp() {
         <Grid container spacing={2}>
             <Grid item xs={12}>
               <FormInputText
-                name="name"
+                name="firstName"
                 control={control}
-                label="Name"
+                label="First Name"
                 variant="outlined"
                 required
                 fullWidth
-                id="name"/>
-              <Typography>{errors.name?.message}</Typography>
+                id="firstName"/>
+              <Typography>{errors.firstName?.message}</Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <FormInputText
+                name="lastName"
+                control={control}
+                label="Last Name"
+                variant="outlined"
+                required
+                fullWidth
+                id="lastName"/>
+              <Typography>{errors.lastName?.message}</Typography>
             </Grid>
             <Grid item xs={12}>
               <FormInputText

@@ -19,9 +19,10 @@ import { useForm } from "react-hook-form";
 import config from "../config";
 import { jwtAccessState, jwtRefreshState, userIdState } from '../common/auth';
 import { useSetRecoilState } from 'recoil';
-import { schemas, utils } from '../common';
+import { schemas } from '../common';
 import { RouteLink } from '../components';
 import { joiResolver } from '@hookform/resolvers/joi';
+import { success } from '../common/utils';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -75,7 +76,7 @@ export default function SignIn() {
       })
     })
     .then((response) => {
-      if (utils.success(response)) {
+      if (success(response)) {
         response.json()
           .then((parsedResponse) => {
             // TODO: Check if the response was successful
