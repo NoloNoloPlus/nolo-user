@@ -6,16 +6,16 @@ import config from "../config"
 import { useRouter } from 'next/router'
 
 // Messo solo per avere dei dati
-const initialProducts = [
-    {
-        name: 'Betsy',
-        blurb: 'Trattore sano e genuino',
-        imageUrl: 'https://www.evo-tune.it/wp-content/uploads/2019/06/trattore.png'
+const initialProducts = []
+
+const truncate = (input, maxLength) => {
+    if (input) {
+        return input.length > maxLength ? `${input.substring(0, maxLength - 3)}...` : input;
     }
-]
-
-const truncate = (input, maxLength) => input.length > maxLength ? `${input.substring(0, maxLength - 3)}...` : input;
-
+    else {
+        return 'No description available.'
+    }
+} 
 const Products = () => {
     const router = useRouter();
     const [products, setProducts] = useState(initialProducts)
@@ -43,7 +43,8 @@ const Products = () => {
                     name: parsedProduct.name,
                     id: parsedProduct.id,
                     blurb: truncate(parsedProduct.description, 50),
-                    coverImage: parsedProduct.coverImage
+                    coverImage: parsedProduct.coverImage,
+                    stars: parsedProduct.stars
                 })
             }
 
@@ -56,7 +57,7 @@ const Products = () => {
             <Box>
             {
                 products.map((product, index) => 
-                    <Product name={product.name} coverImage={product.coverImage} blurb={product.blurb} id={product.id} key={'product' + index}/>
+                    <Product name={product.name} coverImage={product.coverImage} blurb={product.blurb} id={product.id} stars={product.stars} key={'product' + index}/>
                 )
             }
             </Box>
