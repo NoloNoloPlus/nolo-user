@@ -54,7 +54,7 @@ const Products = () => {
 
     return (
         <div>
-            <div className="is-flex is-flex-direction-column is-align-items-center">
+            <div className="is-flex is-align-items-space-around is-justify-content-space-around is-flex-wrap-wrap">
             {
                 products.map((product, index) => 
                     <Product name={product.name} coverImage={product.coverImage} blurb={product.blurb} id={product.id} stars={product.stars} key={'product' + index}/>

@@ -6,7 +6,7 @@ export default function Product(props) {
   const router = useRouter();
 
   return (
-    <div className="card mb-4" style={{width: '20em'}}>
+    <div className="card mb-4 m-5" style={{width: '20em'}}>
       <div className="card-image">
         <figure className="image is-4by3" style={{overflow: 'hidden'}}>
           <img src={props.coverImage} alt={props.name} style={{width: '100%', height: 'auto'}}/>
