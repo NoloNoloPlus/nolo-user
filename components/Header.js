@@ -91,31 +91,38 @@ export default function Header(props) {
   const getRedirect = () => router.pathname == '/' ? '' : '?redirect=' 
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static">
-        <Toolbar>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
-            </div>
-            <form onSubmit={executeSearch}>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                value={search}
-                inputProps={{ 'aria-label': 'search' }}
-                onInput={(event) => setSearch(event.target.value)}
-              />
-            </form>
+    <div>
+      <nav className="navbar is-link" role="navigation" aria-label="main navigation">
+        <div className="navbar-brand">
+          <a className="navbar-item" onClick={() => router.push('/')}>
+            <img src="https://github.com/NoloNoloPlus/nolo-office/blob/main/images/NologoExtended.png?raw=true" width="62" height="32"/>
+          </a>
+
+          <a role="button" className="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
+
+        <div id="navbarBasicExample" className="navbar-menu">
+          <div className="navbar-start">
+
+            <a className="navbar-item" onClick={() => router.push('/rentals')}>
+              Rentals
+            </a>
+
           </div>
-          <Button color="inherit" onClick={() => router.push('/')}>Home</Button>
-          {userId ? <Button color="inherit" onClick={() => router.push('/rentals')}>Rentals</Button> : <></>}
-          {userId ? <Button color="inherit" onClick={logout}>Logout</Button> : <Button color="inherit" onClick={() => router.push('/signin' + getRedirect())}>Login</Button>}
-        </Toolbar>
-      </AppBar>
+
+          <div className="navbar-end">
+            <div className="navbar-item">
+              <div className="buttons">
+                {userId ? <a className="button is-danger" onClick={logout}>Log out</a> : <a className="button is-primary" onClick={() => router.push('/signin' + getRedirect())}>Log in</a>}
+              </div>
+            </div>
+          </div>
+        </div>
+      </nav>
     </div>
   );
 }
