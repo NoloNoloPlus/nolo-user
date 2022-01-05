@@ -3,8 +3,8 @@ import { Page, Document, Image, StyleSheet, Text, View } from '@react-pdf/render
 import InvoiceTitle from './InvoiceTitle'
 import BillTo from './BillTo'
 import InvoiceNo from './InvoiceNo'
-import InvoiceItemsTable from './InvoiceItemsTable'
-import InvoiceThankYouMsg from './InvoiceThankYouMsg'
+// import InvoiceItemsTable from './InvoiceItemsTable'
+// import InvoiceThankYouMsg from './InvoiceThankYouMsg'
 
 
 const borderColor = '#90e5fc'
