@@ -53,15 +53,15 @@ const Products = () => {
     }, [router.query.q])
 
     return (
-        <Box>
-            <Box>
+        <div>
+            <div className="is-flex is-flex-direction-column is-align-items-center">
             {
                 products.map((product, index) => 
                     <Product name={product.name} coverImage={product.coverImage} blurb={product.blurb} id={product.id} stars={product.stars} key={'product' + index}/>
                 )
             }
-            </Box>
-        </Box>
+            </div>
+        </div>
         
     )
 }
