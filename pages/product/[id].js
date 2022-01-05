@@ -4,11 +4,11 @@ import { useRouter } from 'next/router'
 import config from "../../config"
 import DateFnsUtils from '@date-io/date-fns'
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
-import { format } from 'date-format-parse'
 import { jwtAccessState, jwtAuthorizationHeader, jwtRefreshState, userIdState } from '../../common/auth'
 import { useRecoilState } from "recoil"
-import { utils } from "../../common"
+import { formatBackendDate } from "../../common/utils"
 import { RouteLink } from "../../components"
+import ProductBreakdown from "../../components/breakdowns/ProductBreakdown"
 
 export default function ProductInfo() {
     const router = useRouter();
@@ -59,7 +59,6 @@ export default function ProductInfo() {
             })
             .then((response) => response.json())
             .then((parsedResponse) => {
-                console.log(parsedResponse)
                 const newAvailability = [];
                 for (let availability of Array.from(parsedResponse)) {
                     newAvailability.push([dayToUTC(new Date(availability[0])), dayToUTC(new Date(availability[1]))]);
@@ -69,12 +68,10 @@ export default function ProductInfo() {
         }
     }, [id, userId])
 
-    const formatDate = (date) => format(date, 'YYYY-MM-DD')
-
     useEffect(() => {
         if (!startDate || !endDate) return;
 
-        fetch(config.api_endpoint + '/products/' + id + '/quote?from=' + formatDate(startDate) + '&to=' + formatDate(endDate), {
+        fetch(config.api_endpoint + '/products/' + id + '/quote?from=' + formatBackendDate(startDate) + '&to=' + formatBackendDate(endDate), {
             headers: {
                 pragma: 'no-cache',
                 'cache-control' : 'no-cache',
@@ -83,6 +80,8 @@ export default function ProductInfo() {
         })
         .then((response) => response.json())
         .then((parsedResponse) => {
+            console.log('Quote:')
+            console.log(parsedResponse)
             setQuote(parsedResponse)
         })
     }, [startDate, endDate])
@@ -164,8 +163,8 @@ export default function ProductInfo() {
             }
             for (let i = 0; i < instance.dateRanges.length; i++) {
                 formattedInstances[instanceId].dateRanges.push({
-                    from: formatDate(instance.dateRanges[i].from),
-                    to: formatDate(instance.dateRanges[i].to)
+                    from: formatBackendDate(instance.dateRanges[i].from),
+                    to: formatBackendDate(instance.dateRanges[i].to)
                 })
             }
         }
@@ -205,6 +204,14 @@ export default function ProductInfo() {
 
                         <Button onClick={rent} title='Rent' disabled={!startDate || !endDate}>Rent</Button>
                         {quote ? <Typography>Price: {quote.price}</Typography> : <></>}
+                        {quote ? (
+                            <Box>
+                                <Typography>
+                                    Cost breakdown:
+                                </Typography>
+                                <ProductBreakdown {...quote} />
+                            </Box>
+                        ) : <></>}
                         {quote && quote.instances.length > 1 ? (<Typography>This accomodation requires switching instance mid-rental.</Typography>) : <></>}
                     </Box>
                 ) : <RouteLink variant="body2" href={'/signin?redirect='}>Login to view availability</RouteLink>

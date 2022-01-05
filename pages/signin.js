@@ -22,7 +22,7 @@ import { useSetRecoilState } from 'recoil';
 import { schemas } from '../common';
 import { RouteLink } from '../components';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { success } from '../common/utils';
+import utils from '../common/utils';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -76,7 +76,7 @@ export default function SignIn() {
       })
     })
     .then((response) => {
-      if (success(response)) {
+      if (utils.success(response)) {
         response.json()
           .then((parsedResponse) => {
             // TODO: Check if the response was successful
