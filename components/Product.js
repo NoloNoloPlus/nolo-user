@@ -14,7 +14,7 @@ export default function Product(props) {
       </div>
       <div className="card-content">
         <p className="title is-4">{props.name}</p>
-        <p>{props.blurb}</p>
+        <p style={{height: '4em'}}>{props.blurb}</p>
         <button className="button is-info" size="small" color="primary" onClick={() => router.push('product/' + props.id)}>
           More info
         </button>
