@@ -188,36 +188,34 @@ export default function ProductInfo() {
     }
     
     return (
-        <Box>
-            <Box>
-                <Box>
-                    <Typography variant='header1'>{name}</Typography>
-                    <img src={coverImage} alt={name}/>
+        <div className="is-flex is-flex-direction-column is-align-items-center">
+            <p className="title">{name}</p>
+            <p className="subtitle">{description}</p>
+            <img className="image" style={{width: '13em'}} src={coverImage} alt={name}/>
+            { userId ? (
+                <Box className="mt-5">
+                    <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <p>From:</p>
+                        <DatePicker value={startDate} onChange={setStartDate} shouldDisableDate={startShouldDisableDate} disablePast={true} clearable={true} variant='dialog'/>
+                        <br></br>
+                        <p>To:</p>
+                        <DatePicker value={endDate} onChange={setEndDate} shouldDisableDate={endShouldDisableDate} disablePast={true} clearable={true} variant='dialog'/>
+                    </MuiPickersUtilsProvider>
+                    <br></br>
+                    <button className="button is-link mt-2" onClick={rent} title='Rent' disabled={!startDate || !endDate}>Rent</button>
+                    {quote ? <Typography>Price: {quote.price}</Typography> : <></>}
+                    {quote ? (
+                        <Box>
+                            <Typography>
+                                Cost breakdown:
+                            </Typography>
+                            <ProductBreakdown {...quote} />
+                        </Box>
+                    ) : <></>}
+                    {quote && quote.instances.length > 1 ? (<Typography>This accomodation requires switching instance mid-rental.</Typography>) : <></>}
                 </Box>
-                <Typography variant='paragraph'>{description}</Typography>
-                { userId ? (
-                    <Box>
-                        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <DatePicker value={startDate} onChange={setStartDate} shouldDisableDate={startShouldDisableDate} disablePast={true} clearable={true} variant='dialog'/>
-                            <DatePicker value={endDate} onChange={setEndDate} shouldDisableDate={endShouldDisableDate} disablePast={true} clearable={true} variant='dialog'/>
-                        </MuiPickersUtilsProvider>
-
-                        <Button onClick={rent} title='Rent' disabled={!startDate || !endDate}>Rent</Button>
-                        {quote ? <Typography>Price: {quote.price}</Typography> : <></>}
-                        {quote ? (
-                            <Box>
-                                <Typography>
-                                    Cost breakdown:
-                                </Typography>
-                                <ProductBreakdown {...quote} />
-                            </Box>
-                        ) : <></>}
-                        {quote && quote.instances.length > 1 ? (<Typography>This accomodation requires switching instance mid-rental.</Typography>) : <></>}
-                    </Box>
-                ) : <RouteLink variant="body2" href={'/signin?redirect='}>Login to view availability</RouteLink>
-                }
-                
-            </Box>
-        </Box>
+            ) : <RouteLink variant="body2" href={'/signin?redirect='}>Login to view availability</RouteLink>
+            }
+        </div>
     )
 }
