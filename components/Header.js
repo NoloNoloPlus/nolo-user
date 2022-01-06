@@ -92,7 +92,7 @@ export default function Header(props) {
 
   return (
     <div>
-      <nav className="navbar is-link" role="navigation" aria-label="main navigation">
+      <nav className="navbar is-black" role="navigation" aria-label="main navigation">
         <div className="navbar-brand">
           <a className="navbar-item" onClick={() => router.push('/')}>
             <img src="https://github.com/NoloNoloPlus/nolo-office/blob/main/images/NologoExtended.png?raw=true" width="62" height="32"/>
@@ -107,6 +107,9 @@ export default function Header(props) {
 
         <div id="navbarBasicExample" className="navbar-menu">
           <div className="navbar-start">
+            <a className="navbar-item" onClick={() => router.push('/products')}>
+              Products
+            </a>
 
             <a className="navbar-item" onClick={() => router.push('/rentals')}>
               Rentals
