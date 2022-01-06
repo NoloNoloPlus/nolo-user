@@ -83,10 +83,15 @@ const mergeDateRanges = (dateRanges) => {
     return finalRanges
 }
 
+const formatPrice = (price) => {
+    return price.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+}
+
 export default {
     applyDiscounts,
     formatBackendDate,
     formatFrontendDate,
+    formatPrice,
     overallDateRanges,
     mergeDateRanges,
     success

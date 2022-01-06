@@ -20,6 +20,8 @@ function applyContainsWeekendDiscount(price, dateRange, discount) {
             }
         }
     }
+
+    return price;
 }
 
 function applyContainsWeekendDiscounts(price, dateRange, discounts) {
@@ -28,6 +30,8 @@ function applyContainsWeekendDiscounts(price, dateRange, discounts) {
             price -= applyContainsWeekendDiscount(price, dateRange, discount);
         }
     }
+
+    return price;
 }
 
 function applyStandardDiscounts(price, discounts) {
@@ -102,13 +106,14 @@ function rentalPrice(rental, discounted) {
     }
 
     if (discounted) {
-        totalPrice = applyStandardDiscounts(totalPrice, product.discounts)
+        totalPrice = applyStandardDiscounts(totalPrice, rental.discounts)
     }
 
     return totalPrice;
 }
 
 export {
+    applyContainsWeekendDiscount,
     dateRangePrice,
     instancePrice,
     productPrice,
