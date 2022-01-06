@@ -1,11 +1,21 @@
 import { Typography } from "@material-ui/core";
 
 export default function DiscountInfo({ name, description, type, value }) {
-    const formattedDiscount = type == 'percentage' ? `${value * 100}%` : `${value}€`;
+    let formattedDiscount = null;
+
+    if (type === 'percentage') {
+        formattedDiscount = `-${value * 100}%`;
+    } else if (type === 'amount') {
+        formattedDiscount = `-${value}€`;
+    } else if (type === 'containsWeekend') {
+        formattedDiscount = `Sunday Free, Saturday ${value * 100}% off`
+    } else {
+        throw new Error('Unknown discount type');
+    }
     
     return (
         <div>
-            <Typography variant="h5">{name} -{formattedDiscount}</Typography>
+            <Typography variant="h5">{name} {formattedDiscount}</Typography>
             <Typography variant="body1">{description}</Typography>
         </div>
     )

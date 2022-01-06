@@ -1,34 +1,30 @@
 import { Accordion, AccordionDetails, AccordionSummary, List, ListItem, Typography } from "@material-ui/core"
-
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import InstanceBreakdown from "./InstanceBreakdown"
+import DateRangeBreakdown from "./DateRangeBreakdown"
 import DiscountInfo from "./DiscountInfo"
 
-import { productPrice } from "../../common/price";
+import { instancePrice } from "../../common/price";
 
-export default function ProductBreakdown( { instances, discounts, productInfo }) {
-    productInfo = productInfo || {};
+export default function InstanceBreakdown( { dateRanges, discounts, instanceInfo }) {
+    instanceInfo = instanceInfo || {};
 
-    instances = Object.entries(instances).map(([instanceId, instance]) => ({ ...instance, id: instanceId }))
-
-    const totalPrice = productPrice({ instances, discounts }, false)
+    const totalPrice = instancePrice({ dateRanges, discounts }, false)
 
     let discountedPrice = null;
     if (discounts && discounts.length > 0) {
-        discountedPrice = productPrice({ instances, discounts }, true)
+        discountedPrice = instancePrice({ dateRanges, discounts }, true)
     }
-
     return (
         <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography>{productInfo.name}</Typography>
+                <Typography>{instanceInfo.name}</Typography>
             </AccordionSummary>
             <AccordionDetails>
                 <List>
-                    {instances.map((instance, i) => (
+                    {dateRanges.map((dateRange, i) => (
                         <ListItem>
-                            <InstanceBreakdown key={i} {...instance} instanceInfo={productInfo.instances ? productInfo.instances[instance.id] : null} />
+                            <DateRangeBreakdown key={i} {...dateRange} />
                         </ListItem>
                     ))}
                 </List>

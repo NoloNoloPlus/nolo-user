@@ -1,15 +1,10 @@
 import React, {useEffect, useState} from "react"
-import Product from "../components/Product"
-import Header from "../components/Header"
-import { Accordion, AccordionDetails, AccordionSummary, Typography } from "@material-ui/core"
 import config from "../config"
 import { useRouter } from 'next/router'
 import { useRecoilState } from "recoil"
 import { jwtAccessState, jwtAuthorizationHeader, jwtRefreshState, userIdState } from '../common/auth'
 
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
-import Rental from "../components/Rental"
+import RentalBreakdown from "../components/breakdowns/RentalBreakdown"
 
 const Rentals = () => {
     const router = useRouter();
@@ -19,7 +14,7 @@ const Rentals = () => {
     const [jwtRefresh, setJwtRefresh] = useRecoilState(jwtRefreshState)
 
     useEffect(() => {
-        fetch(config.api_endpoint + '/rentals/', {
+        fetch(config.api_endpoint + '/rentals/?userId=' + userId, {
             headers: {
                 pragma: 'no-cache',
                 'cache-control' : 'no-cache',
@@ -37,7 +32,7 @@ const Rentals = () => {
     return (
         <div>
             {rentals.map((rental) => (
-                <Rental key={rental.id} {...rental} />
+                <RentalBreakdown key={rental.id} {...rental} />
             ))}
         </div>
     )
