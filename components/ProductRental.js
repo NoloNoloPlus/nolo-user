@@ -14,7 +14,7 @@ import { useRouter } from 'next/router'
 import { renderToStaticMarkup } from 'react-dom/server';
 
 import config from '../config'
-import { formatFrontendDate } from '../common/utils'
+import utils from '../common/utils'
 
 const useStyles = makeStyles({
   root: {
@@ -78,8 +78,8 @@ export default function ProductRental({ id, instances, productInfo }) {
                 const [nextInstanceId, x] = dateRangeList[i + 1]
 
                 effectiveDateRanges.push({
-                    from: formatFrontendDate(from),
-                    to: formatFrontendDate(to),
+                    from: utils.formatFrontendDate(from),
+                    to: utils.formatFrontendDate(to),
                     price
                 })
 
@@ -89,8 +89,8 @@ export default function ProductRental({ id, instances, productInfo }) {
             }
             else {
                 effectiveDateRanges.push({
-                    from: formatFrontendDate(from),
-                    to: formatFrontendDate(to),
+                    from: utils.formatFrontendDate(from),
+                    to: utils.formatFrontendDate(to),
                     price
                 })
             }
