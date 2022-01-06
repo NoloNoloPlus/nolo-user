@@ -9,6 +9,7 @@ import { useRecoilState } from "recoil"
 import utils from "../../common/utils"
 import { RouteLink } from "../../components"
 import ProductBreakdown from "../../components/breakdowns/ProductBreakdown"
+import { productPrice } from "../../common/price"
 
 export default function ProductInfo() {
     const router = useRouter();
@@ -20,6 +21,7 @@ export default function ProductInfo() {
     const [endDate, setEndDate] = useState(null)
     const [availability, setAvailability] = useState(null)
     const [quote, setQuote] = useState(null)
+    const [availabilityQuote, setAvailabilityQuote] = useState(null);
     const [userId, setUserId] = useRecoilState(userIdState);
     const [jwtAccess, setJwtAccess] = useRecoilState(jwtAccessState);
     const [jwtRefresh, setJwtRefresh] = useRecoilState(jwtRefreshState);
@@ -92,6 +94,31 @@ export default function ProductInfo() {
             setQuote(parsedResponse)
         })
     }, [startDate, endDate])
+
+    useEffect(() => {
+        if (!startDate || !endDate) return;
+
+        fetch(config.api_endpoint + '/products/' + id + '/quote?from=' + utils.formatBackendDate(startDate) + '&to=' + utils.formatBackendDate(endDate) + '&ignoreAllRentals=true', {
+            headers: {
+                pragma: 'no-cache',
+                'cache-control' : 'no-cache',
+                authorization : jwtAuthorizationHeader(jwtAccess, jwtRefresh, setJwtAccess, setJwtRefresh)
+            },
+        })
+        .then((response) => response.json())
+        .then((parsedResponse) => {
+            console.log('Availability quote:')
+            console.log(parsedResponse)
+            setAvailabilityQuote(parsedResponse)
+        })
+    }, [startDate, endDate])
+
+    const differentPrices = () => {
+        if (quote && availabilityQuote) {
+            return productPrice(quote) !== productPrice(availabilityQuote)
+        }
+        return false;
+    }
 
     const dateInRanges = (day, ranges) => {
         for (var range of ranges) {
@@ -220,6 +247,9 @@ export default function ProductInfo() {
                         </Box>
                     ) : <></>}
                     {quote && quote.instances.length > 1 ? (<Typography>This accomodation requires switching instance mid-rental.</Typography>) : <></>}
+                    {differentPrices() ? (
+                        <Typography>Note: the most convenient offer was already taken. We apologize for the inconvenience. May the Sun God be with you.</Typography>
+                    ) : <></>}
                 </Box>
             ) : <RouteLink variant="body2" href={'/signin?redirect='}>Login to view availability</RouteLink>
             }
