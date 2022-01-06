@@ -6,6 +6,7 @@ import Invoice from '../invoice/Invoice';
 import { pdf } from '@react-pdf/renderer';
 import { utils } from '../../common';
 import { format } from 'date-format-parse';
+import { saveAs } from 'file-saver';
 
 export default function InvoiceButton ({ id, products, discounts, productIdToProductInfo }) {
     const formatInvoiceDate = (date) => format(date, 'MMM d, YYYY')
