@@ -26,6 +26,7 @@
     "imagemin-optipng": "^8.0.0",
     "intersecting-ranges": "^1.2.0",
     "joi": "^17.4.2",
+    "merge-ranges": "^1.0.2",
     "next": "^11.1.0",
     "next-compose-plugins": "^2.2.1",
     "next-optimized-images": "^2.6.2",
