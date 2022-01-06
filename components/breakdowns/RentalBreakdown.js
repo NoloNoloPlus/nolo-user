@@ -10,9 +10,25 @@ import { rentalPrice } from "../../common/price"
 import config from "../../config"
 import InvoiceButton from './InvoiceButton';
 
-export default function RentalBreakdown({ id, products, discounts, closed }) {
+export default function RentalBreakdown({ id, products, discounts, status, approvedBy }) {
     // === Product info retrieval ===
     const [productIdToProductInfo, setProductIdToProductInfo] = useState({})
+
+    const statusName = () => {
+        if (status === 'ready') {
+            if (approvedBy) {
+                return 'Approved'
+            } else {
+                return 'Wating for approval'
+            }
+        } else if (status === 'active') {
+            return 'Active'
+        } else if (status === 'closed') {
+            return 'Closed'
+        }
+
+        return 'Unknown';
+    }
 
     useEffect(() => {
         for (const productId of Object.keys(products)) {
@@ -67,7 +83,7 @@ export default function RentalBreakdown({ id, products, discounts, closed }) {
                         </List>
                     </div>
                 ) : <></> }
-                <Typography>Status: {closed ? 'Closed' : 'Open'}</Typography>
+                <Typography>Status: { statusName() }</Typography>
                 <Typography>Total price: {totalPrice} €</Typography>
                 { discountedPrice !== null ? <Typography>Discounted price: {discountedPrice} €</Typography> : <></> }
                 <InvoiceButton id={id} products={products} discounts={discounts} productIdToProductInfo={productIdToProductInfo} />
