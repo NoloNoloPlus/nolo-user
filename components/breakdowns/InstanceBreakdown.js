@@ -1,4 +1,4 @@
-import { Accordion, AccordionDetails, AccordionSummary, List, ListItem, Typography } from "@material-ui/core"
+import { Accordion, AccordionDetails, AccordionSummary, Divider, List, ListItem, Typography } from "@material-ui/core"
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import DateRangeBreakdown from "./DateRangeBreakdown"
@@ -16,35 +16,35 @@ export default function InstanceBreakdown( { dateRanges, discounts, instanceInfo
         discountedPrice = instancePrice({ dateRanges, discounts }, true)
     }
     return (
-        <Accordion>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography>{instanceInfo.name}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-                <List>
+        <div className="p-3" style={{border: '1px solid black'}}>
+            <div expandIcon={<ExpandMoreIcon />}>
+                <p>{instanceInfo.name}</p>
+            </div>
+            <div>
+                <div>
                     {dateRanges.map((dateRange, i) => (
-                        <ListItem>
+                        <div key={i}>
                             <DateRangeBreakdown key={i} {...dateRange} />
-                        </ListItem>
+                        </div>
                     ))}
-                </List>
+                </div>
                 { discountedPrice !== null ? (
                     <div>
-                        <Typography>Discounts:</Typography>
-                        <List>
+                        <p>Discounts:</p>
+                        <div>
                             {
                                 discounts.map((discount, i) => (
-                                    <ListItem key={i}>
+                                    <div key={i}>
                                         <DiscountInfo {...discount} />
-                                    </ListItem>
+                                    </div>
                                 ))
                             }
-                        </List>
+                        </div>
                     </div>
                 ) : <></> }
-                <Typography>Total price: {totalPrice} €</Typography>
-                { discountedPrice !== null ? <Typography>Discounted price: {discountedPrice} €</Typography> : <></> }
-            </AccordionDetails>
-        </Accordion>
+                <p>Total price: {totalPrice} €</p>
+                { discountedPrice !== null ? <p>Discounted price: {discountedPrice} €</p> : <></> }
+            </div>
+        </div>
     )
 }

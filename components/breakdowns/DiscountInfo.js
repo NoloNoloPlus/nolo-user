@@ -15,8 +15,8 @@ export default function DiscountInfo({ name, description, type, value }) {
     
     return (
         <div>
-            <Typography variant="h5">{name} {formattedDiscount}</Typography>
-            <Typography variant="body1">{description}</Typography>
+            <p>{name} {formattedDiscount}</p>
+            <p>{description}</p>
         </div>
     )
 }

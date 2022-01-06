@@ -36,7 +36,7 @@ const overallDateRanges = (instances, formatter) => {
 }
 
 const formatBackendDate = (date) => format(date, 'YYYY-MM-DD')
-const formatFrontendDate = (date) => format(date, 'MMM d, YYYY')
+const formatFrontendDate = (date) => format(date, 'MMM DD, YYYY')
 
 const applyDiscounts = (price, discounts) => {
     console.log('Discounts', discounts)

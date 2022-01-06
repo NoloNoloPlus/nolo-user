@@ -16,31 +16,31 @@ export default function DateRangeBreakdown( { from, to, price, discounts }) {
     }
 
     return (
-        <Accordion>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography>
+        <div className="p-3" style={{border: '1px solid black'}}>
+            <div expandIcon={<ExpandMoreIcon />}>
+                <p>
                     {utils.formatFrontendDate(from)} - {utils.formatFrontendDate(to)}: { discountedPrice === null ? totalPrice : discountedPrice} €
-                </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-                <Typography>Price per day: {price} €</Typography>
+                </p>
+            </div>
+            <div>
+                <p>Price per day: {price} €</p>
                 {
                     discountedPrice !== null ? (
                         <div>
-                            <Typography>Discounts:</Typography>
-                            <List>
+                            <p>Discounts:</p>
+                            <div>
                                 {discounts.map((discount, i) => (
-                                    <ListItem key={i}>
+                                    <div key={i}>
                                         <DiscountInfo {...discount} />
-                                    </ListItem>
+                                    </div>
                                 ))}
-                            </List>
+                            </div>
                         </div>
                     ) : <></>
                 }
-                <Typography>Total price: {totalPrice} €</Typography>
-                { discountedPrice !== null ? <Typography>Discounted price: {discountedPrice} €</Typography> : <></> }
-            </AccordionDetails>
-        </Accordion>
+                <p>Total price: {totalPrice} €</p>
+                { discountedPrice !== null ? <p>Discounted price: {discountedPrice} €</p> : <></> }
+            </div>
+        </div>
     )
 }

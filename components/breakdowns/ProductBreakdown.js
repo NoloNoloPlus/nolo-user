@@ -20,35 +20,35 @@ export default function ProductBreakdown( { instances, discounts, productInfo })
     }
 
     return (
-        <Accordion>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography>{productInfo.name}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-                <List>
+        <div className="p-3" style={{border: '1px solid black'}}>
+            <div>
+                <p>{productInfo.name}</p>
+            </div>
+            <div>
+                <div>
                     {instances.map((instance, i) => (
-                        <ListItem>
+                        <div key={i}>
                             <InstanceBreakdown key={i} {...instance} instanceInfo={productInfo.instances ? productInfo.instances[instance.id] : null} />
-                        </ListItem>
+                        </div>
                     ))}
-                </List>
+                </div>
                 { discountedPrice !== null ? (
                     <div>
-                        <Typography>Discounts:</Typography>
-                        <List>
+                        <p>Discounts:</p>
+                        <div>
                             {
                                 discounts.map((discount, i) => (
-                                    <ListItem key={i}>
+                                    <div key={i}>
                                         <DiscountInfo {...discount} />
-                                    </ListItem>
+                                    </div>
                                 ))
                             }
-                        </List>
+                        </div>
                     </div>
                 ) : <></> }
-                <Typography>Total price: {totalPrice} €</Typography>
-                { discountedPrice !== null ? <Typography>Discounted price: {discountedPrice} €</Typography> : <></> }
-            </AccordionDetails>
-        </Accordion>
+                <p>Total price: {totalPrice} €</p>
+                { discountedPrice !== null ? <p>Discounted price: {discountedPrice} €</p> : <></> }
+            </div>
+        </div>
     )
 }

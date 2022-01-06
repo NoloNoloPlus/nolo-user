@@ -64,7 +64,7 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
             <AccordionDetails>
                 <List>
                     {productList.map((product, i) => (
-                        <ListItem>
+                        <ListItem key={i}>
                             <ProductBreakdown key={i} {...product} productInfo={productIdToProductInfo[product.id]} />
                         </ListItem>
                     ))}
