@@ -6,10 +6,14 @@ import InvoiceNo from './InvoiceNo'
 // import InvoiceItemsTable from './InvoiceItemsTable'
 // import InvoiceThankYouMsg from './InvoiceThankYouMsg'
 
+import { applyContainsWeekendDiscount, rentalPrice, productPrice, instancePrice, dateRangePrice } from '../../common/price';
+import { utils } from '../../common';
+
+const formatPrice = utils.formatPrice;
 
 const borderColor = '#90e5fc'
 
-const sixth = (n) => `${n / 6 * 100}%`
+const twelfth = (n) => `${n * 100 / 12}%`
 
 const styles = StyleSheet.create({
     page: {
@@ -62,157 +66,196 @@ const styles = StyleSheet.create({
         paddingRight: 8,
     },
     l0 : {
-        width: sixth(5),
+        width: twelfth(10),
         textAlign: 'left',
         borderRightColor: borderColor,
         borderRightWidth: 1,
         paddingLeft: 8,
     },
     l1: {
-        width: sixth(4),
+        width: twelfth(9),
         textAlign: 'left',
         borderRightColor: borderColor,
         borderRightWidth: 1,
         paddingLeft: 8,
     },
     l2: {
-        width: sixth(3),
+        width: twelfth(8),
+        textAlign: 'left',
+        borderRightColor: borderColor,
+        borderRightWidth: 1,
+        paddingLeft: 8,
+    },
+    l3: {
+        width: twelfth(7),
         textAlign: 'left',
         borderRightColor: borderColor,
         borderRightWidth: 1,
         paddingLeft: 8,
     },
     price: {
-        width: sixth(1),
+        width: twelfth(2),
         textAlign: 'right',
         paddingRight: 8,
     },
     l1indent : {
-        width: sixth(1)
+        width: twelfth(1)
     },
     l2indent : {
-        width: sixth(2)
+        width: twelfth(2)
     },
     l3indent : {
-        width: sixth(3)
+        width: twelfth(3)
     },
 
   });
-  
-const Invoice = ({ invoiceNo, emissionDate, company, address, phone, email, products }) => {
-    const chunkSize = 11
 
+const indentationStyle = (level) => {
+    return {
+        width: twelfth(level)
+    }
+}
+
+const indentedContentStyle = (level) => {
+    return {
+        width:twelfth(12 - level),
+        textAlign: 'left',
+        borderRightColor: borderColor,
+        borderRightWidth: 1,
+        paddingLeft: 8,
+    }
+}
+  
+const Invoice = ({ invoiceNo, emissionDate, company, address, phone, email, products, discounts }) => {
+    discounts = discounts || [];
+    const chunkSize = 23;
     const formattedRows = []
 
-    let overallTotal = 0
+    let currentRowIndex = 0;
 
-    if (products) {
-        console.log(products.length)
-        for (let i = 0; i < products.length; i++) {
-            const product = products[i]
-            let totalPrice = 0
+    const createRow = (indent, content, price) => {
+        formattedRows.push(
+            <View style={styles.row} key={'row' + currentRowIndex}>
+                <Text style={indentationStyle(indent)} />
+                <Text style={indentedContentStyle(indent)}>{content}</Text>
+                <Text style={styles.price}>{price}</Text>
+            </View>
+        )
 
-            formattedRows.push(
-                <View style={styles.row} key={`TR${product.id}`}>
-                    <Text style={styles.l0}>{product.name}</Text>
-                    {/*<Text style={styles.qty}>{product.qty}</Text>
-                    <Text style={styles.rate}>{product.rate}</Text>
-            <Text style={styles.amount}>{product.amount}</Text>*/}
-                </View>
-            )
+        currentRowIndex++;
+    }
 
-            console.log('Found dateRanges: ', product.dateRanges)
-            for (const dateRange of product.dateRanges) {
+    const createStandardDiscountRow = (indent, discount) => {
+        let formattedDiscount = ''
+        if (discount.type === 'percentage') {
+            formattedDiscount = `-${discount.value * 100}%`
+        }
+        else if (discount.type === 'fixed') {
+            formattedDiscount = `-${formatPrice(discount.value)}`
+        }
+        else if (discount.type === 'containsWeekend') {
+            throw new Error('containsWeekend is not a standard discount type');
+        }
+        else {
+            throw new Error(`Unknown discount type: ${discount.type}`)
+        }
+
+        createRow(indent, discount.name, formattedDiscount)
+    }
+
+    
+    console.log(products.length)
+    for (const [productId, product] of Object.entries(products)) {
+
+        createRow(0, product.name, null);
+
+        console.log('Found dateRanges: ', product.dateRanges)
+        for (const [instanceId, instance] of Object.entries(product.instances)) {
+            createRow(1, instance.name, null);
+
+            for (const dateRange of instance.dateRanges) {
                 let price = dateRange.price
                 
                 const formattedDateRange = dateRange.from == dateRange.to ?
                     dateRange.from.toString() : `${dateRange.from} - ${dateRange.to}`
 
-                formattedRows.push(
-                    <View style={styles.row} key={`TR${product.id}${dateRange.from}`}>
-                        <Text style={styles.l1indent}>{} </Text>
-                        <Text style={styles.l1}>{formattedDateRange}</Text>
-                        <Text style={styles.price}>{dateRange.price}</Text>
-                    </View>
-                )
+                createRow(2, formattedDateRange, formatPrice(price));
+
+                createRow(3, 'Price per day', formatPrice(dateRange.price));
+                createRow(3, 'Date range total', formatPrice(dateRangePrice(dateRange, false)));
 
                 if (dateRange.discounts.length > 0) {
+                    createRow(3, 'Discounts', '');
+
                     for (const discount of dateRange.discounts) {
                         let formattedDiscount = ''
                         if (discount.type === 'percentage') {
                             formattedDiscount = `-${discount.value * 100}%`
                             price *= (1 - discount.value)
-                        }
-                        else {
-                            formattedDiscount = `-${discount.value}`
+                        } else if (discount.type === 'fixed') {
+                            formattedDiscount = `-${formatPrice(discount.value)}`
                             price -= discount.value
+                        } else if (discount.type === 'containsWeekend') {
+                            const weekendDiscount = applyContainsWeekendDiscount(0, dateRange, discount);
+                            formattedDiscount = `-${formatPrice(weekendDiscount)}`;
+                        } else {
+                            throw new Error(`Unknown discount type: ${discount.type}`)
                         }
-                        formattedRows.push(
-                            <View style={styles.row} key={`TR${product.id}${dateRange.from}${discount.name}`}>
-                                <Text style={styles.l2indent}></Text>
-                                <Text style={styles.l2}>{discount.name}</Text>
-                                <Text style={styles.price}>{formattedDiscount}</Text>
-                            </View>
-                        )
+                        createRow(4, discount.name, formattedDiscount);
                     }
 
-                    formattedRows.push(
-                        <View style={styles.row} key={`TR${product.id}${dateRange.from}After discounts`}>
-                            <Text style={styles.l2indent}></Text>
-                            <Text style={styles.l2}>Total</Text>
-                            <Text style={styles.price}>{price}</Text>
-                        </View>
-                    )
+                    createRow(3, 'Date range total (discounted)', formatPrice(dateRangePrice(dateRange, true)));
                 }
 
-                totalPrice += price
-            }
+                createRow(2, 'Instance total', formatPrice(instancePrice(instance, false)));
 
-            if (product.discounts.length > 0) {
-                for (const discount of product.discounts) {
-                    let formattedDiscount = ''
-                    if (discount.type === 'percentage') {
-                        formattedDiscount = `-${discount.value * 100}%`
-                        totalPrice *= (1 - discount.value)
+                if (instance.discounts.length > 0) {
+                    for (const discount of instance.discounts) {
+                        createStandardDiscountRow(2, discount);
                     }
-                    else {
-                        formattedDiscount = `-${discount.value}`
-                        totalPrice -= discount.value
-                    }
-
-                    formattedRows.push(
-                        <View style={styles.row} key={`TR${product.id}D${discount.name}`}>
-                            <Text style={styles.l1indent}></Text>
-                            <Text style={styles.l1}>{discount.name}</Text>
-                            <Text style={styles.price}>{formattedDiscount}</Text>
-                        </View>
-                    )
+                    createRow(2, 'Instance total (discounted)', formatPrice(instancePrice(instance, true)));
                 }
-
-                formattedRows.push(
-                    <View style={styles.row} key={`TR${product.id}Total`}>
-                        <Text style={styles.l1indent}></Text>
-                        <Text style={styles.l1}>Total</Text>
-                        <Text style={styles.rate}>{totalPrice}</Text>
-                    </View>
-                )
             }
-
-            overallTotal += totalPrice
         }
 
-        formattedRows.push(
-            <View style={styles.row} key={`TR-OverallTotal`}>
-                <Text style={styles.l0}>Overall Total</Text>
-                <Text style={styles.rate}>{overallTotal}</Text>
-            </View>
-        )
+        createRow(1, 'Product total', formatPrice(productPrice(product, false)));
+
+        if (product.discounts.length > 0) {
+            createRow(1, 'Discounts', '');
+
+            for (const discount of product.discounts) {
+                createStandardDiscountRow(2, discount);
+            }
+
+            createRow(1, 'Product total (discounted)', formatPrice(productPrice(product, true)));
+        }
+    }
+
+    createRow(0, 'Rental total', formatPrice(rentalPrice({ products, discounts }, false)));
+    
+    if (discounts.length > 0) {
+        createRow(0, 'Discounts', '');
+        for (const discount of discounts) {
+            createStandardDiscountRow(1, discount);
+        }
+        createRow(0, 'Rental total (discounted)', formatPrice(rentalPrice({products, discounts}, true)));
     }
 
     const chunks = []
 
     for (let i = 0; i < formattedRows.length; i += chunkSize) {
         let chunk = formattedRows.slice(i, i + chunkSize)
+        if (chunk.length < chunkSize) {
+            for (let j = 0; j < chunkSize - chunk.length; j++) {
+                chunk.push(
+                    <View style={styles.row} key={'padding' + i + '-' + j}>
+                        <Text style={indentationStyle(0)}> </Text>
+                        <Text style={indentedContentStyle(0)}> </Text>
+                        <Text style={styles.price}> </Text>
+                    </View>
+                )
+            }
+        }
         chunks.push(chunk)
     }
 

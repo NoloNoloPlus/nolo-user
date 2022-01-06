@@ -19,29 +19,19 @@ export default function InvoiceButton ({ id, products, discounts, productIdToPro
     }
 
     const invoiceFriendlyProducts = () => {
-        const finalProducts = []
+        const finalProducts = {...products};
 
-        if (products) {
-            console.log('PRODUCTS:', products)
-            for (const [productId, product] of Object.entries(products)) {
-                const finalProduct = {...product, id: productId}
-                for (const instance of Object.values(product.instances)) {
-                    for (const dateRange of instance.dateRanges) {
-                        // Outdated
-                        // dateRange.price = parseFloat(dateRange.price.$numberDecimal)
-                    }
+        for (const [productId, product] of Object.entries(finalProducts)) {
+            if (productIdToProductInfo[productId]) {
+                finalProducts[productId].name = productIdToProductInfo[productId].name;
+                for (const [instanceId, instance] of Object.entries(product.instances)) {
+                    instance.name = productIdToProductInfo[productId].instances[instanceId].name;
                 }
-
-                // Keep overallDateRanges?
-                finalProduct.dateRanges = utils.overallDateRanges(finalProduct.instances, formatInvoiceDate)
-                finalProduct.name = productIdToProductInfo[productId]?.name
-                finalProducts.push(finalProduct)
             }
+
         }
-        
-        console.log('Final products:', finalProducts)
-        
-        return finalProducts
+
+        return finalProducts;
     }
 
     const generateInvoice = () => {
@@ -49,6 +39,7 @@ export default function InvoiceButton ({ id, products, discounts, productIdToPro
             invoiceNo={id}
             emissionDate={formatInvoiceDate(new Date())}
             products={invoiceFriendlyProducts()}
+            discounts={discounts}
             />).toBlob().then(blob => saveAs(blob, `Invoice ${id}`));
     }
 
