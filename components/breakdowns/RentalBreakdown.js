@@ -10,7 +10,7 @@ import { rentalPrice } from "../../common/price"
 import config from "../../config"
 import InvoiceButton from './InvoiceButton';
 
-export default function RentalBreakdown({ id, products, discounts }) {
+export default function RentalBreakdown({ id, products, discounts, closed }) {
     // === Product info retrieval ===
     const [productIdToProductInfo, setProductIdToProductInfo] = useState({})
 
@@ -67,6 +67,7 @@ export default function RentalBreakdown({ id, products, discounts }) {
                         </List>
                     </div>
                 ) : <></> }
+                <Typography>Status: {closed ? 'Closed' : 'Open'}</Typography>
                 <Typography>Total price: {totalPrice} €</Typography>
                 { discountedPrice !== null ? <Typography>Discounted price: {discountedPrice} €</Typography> : <></> }
                 <InvoiceButton id={id} products={products} discounts={discounts} productIdToProductInfo={productIdToProductInfo} />
