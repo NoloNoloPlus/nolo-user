@@ -1,4 +1,5 @@
 import { format } from 'date-format-parse'
+import mergeRanges from 'merge-ranges';
 
 const success = (response) => {
     return response.status >= 200 && response.status < 300;
@@ -51,10 +52,42 @@ const applyDiscounts = (price, discounts) => {
     return price
 }
 
+const mergeDateRanges = (dateRanges) => {
+    let ranges = [];
+
+    // Convert [22...24] into [22...25]
+    for (const [from, to] of dateRanges) {
+        //const newFrom = new Date(from)
+        //newFrom.setDate(newFrom.getDate() - 1)
+        const newTo = new Date(to)
+        newTo.setDate(newTo.getDate() + 1)
+
+        ranges.push([from, newTo])
+    }
+
+    // Merge the ranges
+    ranges = mergeRanges(ranges)
+
+    const finalRanges = [];
+
+    // Reconvert [22...25] into [22...24]
+    for (const [newFrom, newTo] of ranges) {
+        //const finalFrom = new Date(newFrom)
+        // finalFrom.setDate(finalFrom.getDate() + 1)
+        const finalTo = new Date(newTo)
+        finalTo.setDate(finalTo.getDate() - 1)
+
+        finalRanges.push([newFrom, finalTo])
+    }
+
+    return finalRanges
+}
+
 export default {
     applyDiscounts,
     formatBackendDate,
     formatFrontendDate,
     overallDateRanges,
+    mergeDateRanges,
     success
 }

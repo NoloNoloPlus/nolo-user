@@ -6,7 +6,7 @@ import DateFnsUtils from '@date-io/date-fns'
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
 import { jwtAccessState, jwtAuthorizationHeader, jwtRefreshState, userIdState } from '../../common/auth'
 import { useRecoilState } from "recoil"
-import { formatBackendDate } from "../../common/utils"
+import utils from "../../common/utils"
 import { RouteLink } from "../../components"
 import ProductBreakdown from "../../components/breakdowns/ProductBreakdown"
 
@@ -50,7 +50,7 @@ export default function ProductInfo() {
     useEffect(() => {
         if (userId) {
             console.log('AUTH: ', jwtAuthorizationHeader(jwtAccess, jwtRefresh, setJwtAccess, setJwtRefresh))
-            fetch(config.api_endpoint + '/products/' + id + '/availability', {
+            fetch(config.api_endpoint + '/products/' + id + '/rentability', {
                 headers: {
                     pragma : 'no-cache',
                     'cache-control' : 'no-cache',
@@ -59,10 +59,17 @@ export default function ProductInfo() {
             })
             .then((response) => response.json())
             .then((parsedResponse) => {
+                console.log('Rentability response: ', parsedResponse)
                 const newAvailability = [];
-                for (let availability of Array.from(parsedResponse)) {
-                    newAvailability.push([dayToUTC(new Date(availability[0])), dayToUTC(new Date(availability[1]))]);
+
+                for (const [instanceId, dateRanges] of Object.entries(parsedResponse)) {
+                    console.log('DateRanges: ', dateRanges)
+                    for (const dateRange of dateRanges) {
+                        newAvailability.push([new Date(dateRange.from), new Date(dateRange.to)])
+                    }
                 }
+
+                console.log('Parsed availability: ', newAvailability)
                 setAvailability(newAvailability);
             })
         }
@@ -71,7 +78,7 @@ export default function ProductInfo() {
     useEffect(() => {
         if (!startDate || !endDate) return;
 
-        fetch(config.api_endpoint + '/products/' + id + '/quote?from=' + formatBackendDate(startDate) + '&to=' + formatBackendDate(endDate), {
+        fetch(config.api_endpoint + '/products/' + id + '/quote?from=' + utils.formatBackendDate(startDate) + '&to=' + utils.formatBackendDate(endDate), {
             headers: {
                 pragma: 'no-cache',
                 'cache-control' : 'no-cache',
@@ -163,8 +170,8 @@ export default function ProductInfo() {
             }
             for (let i = 0; i < instance.dateRanges.length; i++) {
                 formattedInstances[instanceId].dateRanges.push({
-                    from: formatBackendDate(instance.dateRanges[i].from),
-                    to: formatBackendDate(instance.dateRanges[i].to)
+                    from: utils.formatBackendDate(instance.dateRanges[i].from),
+                    to: utils.formatBackendDate(instance.dateRanges[i].to)
                 })
             }
         }
