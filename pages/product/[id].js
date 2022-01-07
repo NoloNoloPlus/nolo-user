@@ -56,14 +56,6 @@ export default function ProductInfo() {
             })
     }, [id])
 
-    const dayToUTC = (day) => {
-        const date = day.getDate().toString().padStart(2, '0')
-        const month = (day.getMonth() + 1).toString().padStart(2, '0')
-
-        // Date-only format is parsed as UTC
-        return new Date(Date.parse(`${day.getFullYear()}-${month}-${date}`));
-    }
-
     useEffect(() => {
         if (userId) {
             console.log('AUTH: ', jwtAuthorizationHeader(jwtAccess, jwtRefresh, setJwtAccess, setJwtRefresh))
@@ -136,7 +128,10 @@ export default function ProductInfo() {
     }
 
     const dateInRanges = (day, ranges) => {
-        for (var range of ranges) {
+        // First merge compatible ranges
+        const mergedRanges = utils.mergeDateRanges(ranges);
+
+        for (var range of mergedRanges) {
             const [start, end] = range;
             if (day >= start && day <= end) {
                 return range;
@@ -146,17 +141,14 @@ export default function ProductInfo() {
     }
 
     const startShouldDisableDate = (day) => {
-        return false; // WARN
-        day = dayToUTC(day)
         if (!availability) {
             return true;
         }
         if (endDate) {
-            const utcEndDate = dayToUTC(endDate)
-            if (day > utcEndDate) {
+            if (day > endDate) {
                 return true;
             }
-            const allowedRange = dateInRanges(utcEndDate, availability);
+            const allowedRange = dateInRanges(endDate, availability);
             if (!allowedRange) {
                 return true;
             }
@@ -176,17 +168,14 @@ export default function ProductInfo() {
     }
 
     const endShouldDisableDate = (day) => {
-        return false; //WARN
-        day = dayToUTC(day)
         if (!availability) {
             return true;
         }
         if (startDate) {
-            const utcStartDate = dayToUTC(startDate)
-            if (day < utcStartDate) {
+            if (day < startDate) {
                 return true;
             }
-            const allowedRange = dateInRanges(utcStartDate, availability);
+            const allowedRange = dateInRanges(startDate, availability);
             if (!allowedRange) {
                 return true;
             }
