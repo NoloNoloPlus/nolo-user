@@ -44,6 +44,6 @@ export default function InvoiceButton ({ id, products, discounts, productIdToPro
     }
 
     return (
-        <Button onClick={generateInvoice}>Generate invoice</Button>
+        <button className="button is-black is-small" onClick={generateInvoice}>Invoice</button>
     )
 }

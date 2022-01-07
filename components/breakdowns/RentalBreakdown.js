@@ -56,10 +56,29 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
         discountedPrice = rentalPrice({ products: productList, discounts }, true)
     }
 
+    const renderTag = (status) => {
+        switch (status) {
+            case 'Approved':
+                return <span className="tag is-success">Approved</span>
+            case 'Wating for approval':
+                return <span className="tag is-warning">Wating for approval</span>
+            case 'Active':
+                return <span className="tag is-primary">Active</span>
+            case 'Closed':
+                return <span className="tag is-danger">Closed</span>
+            default:
+                return <span className="tag is-danger">Unknown</span>
+        }
+    }
+
     return (
         <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography>Rental n. {id}</Typography>
+                <div>
+                    <h1 className="title is-5 m-0">Rental n. {id}</h1>
+                    <h1 className="subtitle is-5 m-0 mb-2">Status: {renderTag(statusName())}</h1>
+                </div>
+                
             </AccordionSummary>
             <AccordionDetails>
                 <List>
@@ -68,6 +87,7 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
                             <ProductBreakdown key={i} {...product} productInfo={productIdToProductInfo[product.id]} />
                         </ListItem>
                     ))}
+                    <InvoiceButton id={id} products={products} discounts={discounts} productIdToProductInfo={productIdToProductInfo} />
                 </List>
                 { discountedPrice !== null ? (
                     <div>
@@ -83,10 +103,10 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
                         </List>
                     </div>
                 ) : <></> }
-                <Typography>Status: { statusName() }</Typography>
-                <Typography>Total price: {totalPrice} €</Typography>
+                <div>
                 { discountedPrice !== null ? <Typography>Discounted price: {discountedPrice} €</Typography> : <></> }
-                <InvoiceButton id={id} products={products} discounts={discounts} productIdToProductInfo={productIdToProductInfo} />
+                </div>
+                
             </AccordionDetails>
         </Accordion>
     )

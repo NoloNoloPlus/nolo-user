@@ -16,9 +16,9 @@ export default function InstanceBreakdown( { dateRanges, discounts, instanceInfo
         discountedPrice = instancePrice({ dateRanges, discounts }, true)
     }
     return (
-        <div className="p-3" style={{border: '1px solid black'}}>
+        <div className="p-3" style={{border: '0px solid black'}}>
             <div expandIcon={<ExpandMoreIcon />}>
-                <p>{instanceInfo.name}</p>
+                <h2 className="title is-4">- {instanceInfo.name}: {totalPrice}€</h2>
             </div>
             <div>
                 <div>
@@ -42,7 +42,6 @@ export default function InstanceBreakdown( { dateRanges, discounts, instanceInfo
                         </div>
                     </div>
                 ) : <></> }
-                <p>Total price: {totalPrice} €</p>
                 { discountedPrice !== null ? <p>Discounted price: {discountedPrice} €</p> : <></> }
             </div>
         </div>

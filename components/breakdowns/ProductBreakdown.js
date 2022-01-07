@@ -8,6 +8,7 @@ import DiscountInfo from "./DiscountInfo"
 import { productPrice } from "../../common/price";
 
 export default function ProductBreakdown( { instances, discounts, productInfo }) {
+
     productInfo = productInfo || {};
 
     instances = Object.entries(instances).map(([instanceId, instance]) => ({ ...instance, id: instanceId }))
@@ -20,9 +21,9 @@ export default function ProductBreakdown( { instances, discounts, productInfo })
     }
 
     return (
-        <div className="p-3" style={{border: '1px solid black'}}>
+        <div className="p-3" style={{border: '0px solid black'}}>
             <div>
-                <p>{productInfo.name}</p>
+                <h1 className="title is-1">{productInfo.name}: {totalPrice}€</h1>
             </div>
             <div>
                 <div>
@@ -46,7 +47,6 @@ export default function ProductBreakdown( { instances, discounts, productInfo })
                         </div>
                     </div>
                 ) : <></> }
-                <p>Total price: {totalPrice} €</p>
                 { discountedPrice !== null ? <p>Discounted price: {discountedPrice} €</p> : <></> }
             </div>
         </div>

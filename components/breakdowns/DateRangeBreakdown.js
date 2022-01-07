@@ -16,14 +16,14 @@ export default function DateRangeBreakdown( { from, to, price, discounts }) {
     }
 
     return (
-        <div className="p-3" style={{border: '1px solid black'}}>
+        <div className="p-3" style={{border: '0px solid black'}}>
             <div expandIcon={<ExpandMoreIcon />}>
                 <p>
                     {utils.formatFrontendDate(from)} - {utils.formatFrontendDate(to)}: { discountedPrice === null ? totalPrice : discountedPrice} €
                 </p>
             </div>
             <div>
-                <p>Price per day: {price} €</p>
+                <p className="is-size-7">Price per day: {price}€</p>
                 {
                     discountedPrice !== null ? (
                         <div>
@@ -38,9 +38,9 @@ export default function DateRangeBreakdown( { from, to, price, discounts }) {
                         </div>
                     ) : <></>
                 }
-                <p>Total price: {totalPrice} €</p>
                 { discountedPrice !== null ? <p>Discounted price: {discountedPrice} €</p> : <></> }
             </div>
+            <hr></hr>
         </div>
     )
 }
