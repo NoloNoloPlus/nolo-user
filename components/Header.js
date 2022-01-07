@@ -76,6 +76,11 @@ export default function Header(props) {
   const [userId, setUserId] = useRecoilState(userIdState);
   const [jwtAccess, setJwtAccess] = useRecoilState(jwtAccessState);
   const [jwtRefresh, setJwtRefresh] = useRecoilState(jwtRefreshState);
+  const [isActive, setIsActive] = useState(false);
+
+  const toggleActive = () => {
+      setIsActive(!isActive);
+  }
 
   const logout = () => {
     setUserId(null);
@@ -98,14 +103,14 @@ export default function Header(props) {
             <img src="https://github.com/NoloNoloPlus/nolo-office/blob/main/images/NologoExtended.png?raw=true" width="62" height="32"/>
           </a>
 
-          <a role="button" className="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+          <a role="button" className={isActive ? "navbar-burger is-active" : "navbar-burger"} onClick={toggleActive} aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
           </a>
         </div>
 
-        <div id="navbarBasicExample" className="navbar-menu">
+        <div id="navbarBasicExample" className={isActive ? "navbar-menu is-active" : "navbar-menu"}>
           <div className="navbar-start">
             <a className="navbar-item" onClick={() => router.push('/products')}>
               Products
