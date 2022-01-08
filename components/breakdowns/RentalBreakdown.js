@@ -9,6 +9,7 @@ import DiscountInfo from "./DiscountInfo"
 import { rentalPrice } from "../../common/price"
 import config from "../../config"
 import InvoiceButton from './InvoiceButton';
+import EditRentalButton from './EditRentalButton';
 
 export default function RentalBreakdown({ id, products, discounts, status, approvedBy }) {
     // === Product info retrieval ===
@@ -48,6 +49,8 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
 
     // === Discounts ===
     const productList = Object.entries(products).map(([productId, product]) => ({ ...product, id: productId }))
+
+    const productId = Object.keys(products)[0];
 
     const totalPrice = rentalPrice({ products: productList, discounts }, false)
 
@@ -106,7 +109,7 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
                 <div>
                 { discountedPrice !== null ? <Typography>Discounted price: {discountedPrice} €</Typography> : <></> }
                 </div>
-                
+                <EditRentalButton rentalId={id} productId={productId} productInfo={productIdToProductInfo[productId]} />
             </AccordionDetails>
         </Accordion>
     )
