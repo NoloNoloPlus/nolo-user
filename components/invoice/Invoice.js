@@ -126,7 +126,7 @@ const indentedContentStyle = (level) => {
     }
 }
   
-const Invoice = ({ invoiceNo, emissionDate, company, address, phone, email, products, discounts }) => {
+const Invoice = ({ invoiceNo, emissionDate, company, address, phone, email, products, discounts, penalty }) => {
     discounts = discounts || [];
     const chunkSize = 23;
     const formattedRows = []
@@ -229,6 +229,10 @@ const Invoice = ({ invoiceNo, emissionDate, company, address, phone, email, prod
 
             createRow(1, 'Product total (discounted)', formatPrice(productPrice(product, true)));
         }
+    }
+
+    if (penalty) {
+        createRow(0, 'Penalty: ' + penalty.message, formatPrice(penalty.value));
     }
 
     createRow(0, 'Rental total', formatPrice(rentalPrice({ products, discounts }, false)));

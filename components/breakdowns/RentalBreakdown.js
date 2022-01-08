@@ -11,7 +11,7 @@ import config from "../../config"
 import InvoiceButton from './InvoiceButton';
 import EditRentalButton from './EditRentalButton';
 
-export default function RentalBreakdown({ id, products, discounts, status, approvedBy }) {
+export default function RentalBreakdown({ id, products, discounts, status, approvedBy, penalty }) {
     // === Product info retrieval ===
     const [productIdToProductInfo, setProductIdToProductInfo] = useState({})
 
@@ -52,8 +52,6 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
 
     const productId = Object.keys(products)[0];
 
-    const totalPrice = rentalPrice({ products: productList, discounts }, false)
-
     let discountedPrice = null;
     if (discounts && discounts.length > 0) {
         discountedPrice = rentalPrice({ products: productList, discounts }, true)
@@ -90,7 +88,7 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
                             <ProductBreakdown key={i} {...product} productInfo={productIdToProductInfo[product.id]} />
                         </ListItem>
                     ))}
-                    <InvoiceButton id={id} products={products} discounts={discounts} productIdToProductInfo={productIdToProductInfo} />
+                    <InvoiceButton id={id} products={products} discounts={discounts} productIdToProductInfo={productIdToProductInfo} penalty={penalty} />
                 </List>
                 { discountedPrice !== null ? (
                     <div>
@@ -105,6 +103,13 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
                             }
                         </List>
                     </div>
+                ) : <></> }
+                { penalty ? (
+                    <div>
+                        <p>Penalty: {penalty.message}</p>
+                        <p>{penalty.value} €</p>
+                    </div>
+                    
                 ) : <></> }
                 <div>
                 { discountedPrice !== null ? <Typography>Discounted price: {discountedPrice} €</Typography> : <></> }

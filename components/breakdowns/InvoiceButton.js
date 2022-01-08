@@ -8,7 +8,7 @@ import { utils } from '../../common';
 import { format } from 'date-format-parse';
 import { saveAs } from 'file-saver';
 
-export default function InvoiceButton ({ id, products, discounts, productIdToProductInfo }) {
+export default function InvoiceButton ({ id, products, discounts, productIdToProductInfo, penalty }) {
     const formatInvoiceDate = (date) => format(date, 'MMM d, YYYY')
 
     for (const product of Object.values(products)) {
@@ -40,6 +40,7 @@ export default function InvoiceButton ({ id, products, discounts, productIdToPro
             emissionDate={formatInvoiceDate(new Date())}
             products={invoiceFriendlyProducts()}
             discounts={discounts}
+            penalty={penalty}
             />).toBlob().then(blob => saveAs(blob, `Invoice ${id}`));
     }
 
