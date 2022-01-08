@@ -1,9 +1,8 @@
 import Joi from "joi"
 
 const login = Joi.object().keys({
-    email: Joi.string().email({ tlds: { allow: false } }).required(),
-    password: Joi.string().required(),
-    remember: Joi.boolean()
+    email: Joi.string().email({ tlds: { allow: false } }).required().label('Email'),
+    password: Joi.string().required().label('Password'),
 })
 
 const paymentPreferences = Joi.array().items(Joi.string().valid(

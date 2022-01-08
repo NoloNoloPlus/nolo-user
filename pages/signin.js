@@ -24,6 +24,7 @@ import { RouteLink } from '../components';
 import { joiResolver } from '@hookform/resolvers/joi';
 import utils from '../common/utils';
 import SelectInput from '@material-ui/core/Select/SelectInput';
+import ValidatedInput from '../components/ValidatedInput';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -55,7 +56,7 @@ export default function SignIn() {
   const router = useRouter();
   const classes = useStyles();
   const methods = useForm({ defaultValues: defaultValues, resolver: joiResolver(schemas.login), mode: 'onChange'});
-  const { handleSubmit, control, formState: { errors } } = methods;
+  const { handleSubmit, formState: { errors }, register } = methods;
   const { redirect } = router.query;
   const setJwtAccess = useSetRecoilState(jwtAccessState);
   const setJwtRefresh = useSetRecoilState(jwtRefreshState);
@@ -107,10 +108,8 @@ export default function SignIn() {
       <div className="is-flex is-flex-direction-column is-justify-content-center is-align-items-center">
         <h1 className="title is-1 mt-3">Sign in</h1>
         <div>
-          <input className="input" type="email" placeholder="Email"/>
-          <p>{errors.email?.message}</p>
-          <input className="input" type="password" placeholder="Password"/>
-          <p>{errors.password?.message}</p>
+          <ValidatedInput name="email" type="email" label="Email" placeholder="Email" register={register} errors={errors} />
+          <ValidatedInput name="password" type="password" label="Password" placeholder="Password" register={register} errors={errors} />
           <br></br>
           <button className="button is-black" onClick={handleSubmit(login)}>Sign In</button>
           {serverError ? <p>Error: {serverError.message}</p> : <></>}
