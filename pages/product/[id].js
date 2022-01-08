@@ -31,6 +31,10 @@ export default function ProductInfo() {
     const [productInfo, setProductInfo] = useState({})
 
     useEffect(() => {
+        if (!id) {
+            return;
+        }
+
         fetch(config.api_endpoint + '/products/' + id, {
             headers: {
                 pragma: 'no-cache',
@@ -46,21 +50,25 @@ export default function ProductInfo() {
     }, [id])
 
     useEffect(() => {
-            fetch(config.api_endpoint + '/products/' + id, {
-                headers: {
-                    pragma: 'no-cache',
-                    'cache-control' : 'no-cache'
-                }
-            })
-            .then((response) => response.json())
-            .then((parsedResponse) => {
-                console.log('Received update for id ' + id)
-                setProductInfo(parsedResponse)
-            })
+        if (!id) {
+            return;
+        }
+
+        fetch(config.api_endpoint + '/products/' + id, {
+            headers: {
+                pragma: 'no-cache',
+                'cache-control' : 'no-cache'
+            }
+        })
+        .then((response) => response.json())
+        .then((parsedResponse) => {
+            console.log('Received update for id ' + id)
+            setProductInfo(parsedResponse)
+        })
     }, [id])
 
     useEffect(() => {
-        if (userId) {
+        if (id && userId) {
             console.log('AUTH: ', jwtAuthorizationHeader(jwtAccess, jwtRefresh, setJwtAccess, setJwtRefresh))
             fetch(config.api_endpoint + '/products/' + id + '/rentability', {
                 headers: {
