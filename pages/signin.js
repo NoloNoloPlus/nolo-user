@@ -1,20 +1,7 @@
 import React, { useState } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import Container from '@material-ui/core/Container';
 import Copyright from '../components/Copyright';
 import { useRouter } from 'next/router';
-import { FormInputText, FormInputCheckbox } from '../components/form-elements'
 import { useForm } from "react-hook-form";
 import config from "../config";
 import { jwtAccessState, jwtRefreshState, userIdState } from '../common/auth';
@@ -23,7 +10,6 @@ import { schemas } from '../common';
 import { RouteLink } from '../components';
 import { joiResolver } from '@hookform/resolvers/joi';
 import utils from '../common/utils';
-import SelectInput from '@material-ui/core/Select/SelectInput';
 import ValidatedInput from '../components/ValidatedInput';
 
 const useStyles = makeStyles((theme) => ({
@@ -48,8 +34,7 @@ const useStyles = makeStyles((theme) => ({
 
 const defaultValues = {
   email: "",
-  password: "",
-  remember: true
+  password: ""
 };
 
 export default function SignIn() {
@@ -57,14 +42,16 @@ export default function SignIn() {
   const classes = useStyles();
   const methods = useForm({ defaultValues: defaultValues, resolver: joiResolver(schemas.login), mode: 'onChange'});
   const { handleSubmit, formState: { errors }, register } = methods;
-  const { redirect } = router.query;
   const setJwtAccess = useSetRecoilState(jwtAccessState);
   const setJwtRefresh = useSetRecoilState(jwtRefreshState);
   const setUserId = useSetRecoilState(userIdState);
 
   const [serverError, setServerError] = useState(null)
 
+  console.log(errors);
+
   const login = (data) => {
+    console.log('Login data:', data);
     setServerError(null);
     fetch(config.api_endpoint + '/auth/login', {
       method: 'POST',
@@ -88,7 +75,7 @@ export default function SignIn() {
             setJwtRefresh(parsedResponse.tokens.refresh.token);
             setUserId(parsedResponse.user.id);
       
-            router.push(redirect || '/')
+            router.push('/')
           });
       }
       else {
@@ -100,8 +87,6 @@ export default function SignIn() {
     })
     
   }
-
-  const getRedirect = () => redirect ? `?redirect=${redirect}` : ''
 
   return (
     <div>
@@ -115,7 +100,7 @@ export default function SignIn() {
           {serverError ? <p>Error: {serverError.message}</p> : <></>}
           <div>
           <div>
-            <RouteLink href={'/signup' + getRedirect()} variant="body2">
+            <RouteLink href={'/signup'} variant="body2">
               {"Don't have an account? Sign Up"}
             </RouteLink>
           </div>

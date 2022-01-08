@@ -93,8 +93,6 @@ export default function Header(props) {
     router.push('/?q=' + encodeURI(search))
   }
 
-  const getRedirect = () => router.pathname == '/' ? '' : '?redirect=' 
-
   return (
     <div>
       <nav className="navbar is-black" role="navigation" aria-label="main navigation">
@@ -129,7 +127,7 @@ export default function Header(props) {
           <div className="navbar-end">
             <div className="navbar-item">
               <div className="buttons">
-                {userId ? <a className="button is-danger" onClick={logout}>Log out</a> : <a className="button is-primary" onClick={() => router.push('/signin' + getRedirect())}>Log in</a>}
+                {userId ? <a className="button is-danger" onClick={logout}>Log out</a> : <a className="button is-primary" onClick={() => router.push('/signin')}>Log in</a>}
               </div>
             </div>
           </div>
