@@ -10,13 +10,16 @@ import utils from "../../common/utils"
 import { RouteLink } from "../../components"
 import ProductBreakdown from "../../components/breakdowns/ProductBreakdown"
 import { productPrice } from "../../common/price"
+import ReactStars from 'react-stars'
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
 
 export default function ProductInfo() {
     const router = useRouter();
     const { id } = router.query;
     const [name, setName] = useState('Betsy')
     const [description, setDescription] = useState('Trattore sano e genuino')
-    const [coverImage, setcoverImage] = useState('https://www.evo-tune.it/wp-content/uploads/2019/06/trattore.png')
+    const [images, setImages] = useState([])
     const [startDate, setStartDate] = useState(null)
     const [endDate, setEndDate] = useState(null)
     const [availability, setAvailability] = useState(null)
@@ -38,7 +41,7 @@ export default function ProductInfo() {
         .then((parsedResponse) => {
             setName(parsedResponse.name);
             setDescription(parsedResponse.description);
-            setcoverImage(parsedResponse.coverImage);
+            setImages([...parsedResponse.otherImages, parsedResponse.coverImage]);
         })
     }, [id])
 
@@ -229,33 +232,68 @@ export default function ProductInfo() {
     
     return (
         <div className="columns">
-            <div className="column">
-                <p className="title">{name}</p>
-                <p className="subtitle">{description}</p>
-                <img className="image" style={{width: '13em'}} src={coverImage} alt={name}/>
+            <div className="column p-6">
+                <p className="title has-text-centered">{name}</p>
+                <p className="subtitle has-text-centered">{description}</p>
+                <Carousel style={{height: '3em'}}>
+                    {
+                        images.map((image, i) => (
+                            <div key={i}>
+                                <img src={image} alt={name} />
+                                <p></p>
+                            </div>
+                        ))
+                    }
+                </Carousel>
             </div>
-            <div className="column">
+            <div className="column p-6" style={{backgroundColor: '#f8f0e3', height: '100vh'}}>
                 { userId ? (
                     <div className="mt-5">
+                        <h1 className="title has-text-centered">Select the date period for your rent</h1>
                         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                            <p>From:</p>
-                            <DatePicker value={startDate} onChange={setStartDate} shouldDisableDate={startShouldDisableDate} disablePast={true} clearable={true} variant='dialog'/>
-                            <br></br>
-                            <p>To:</p>
-                            <DatePicker value={endDate} onChange={setEndDate} shouldDisableDate={endShouldDisableDate} disablePast={true} clearable={true} variant='dialog'/>
+                            <div className="field is-horizontal">
+                                <div className="field-label is-normal">
+                                    <label className="label">From</label>
+                                </div>
+                                <div className="field-body">
+                                    <div className="field">
+                                        <p className="control">
+                                            <DatePicker id="fromDate" value={startDate} onChange={setStartDate} shouldDisableDate={startShouldDisableDate} disablePast={true} clearable={true} variant='dialog'/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="field is-horizontal">
+                                <div className="field-label is-normal">
+                                    <label className="label">To</label>
+                                </div>
+                                <div className="field-body">
+                                    <div className="field">
+                                        <p className="control">
+                                            <DatePicker id="toDate" value={endDate} onChange={setEndDate} shouldDisableDate={endShouldDisableDate} disablePast={true} clearable={true} variant='dialog'/>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
                         </MuiPickersUtilsProvider>
                         <br></br>
-                        <button className="button is-link mt-2" onClick={rent} title='Rent' disabled={!startDate || !endDate}>Rent</button>
-                        {quote ? <Typography>Price: {productPrice({...quote}, false)}€</Typography> : <></>}
+                        
                         {quote ? (
                             <div>
-                                <p>Cost breakdown:</p>
                                 <ProductBreakdown productInfo={productInfo} {...quote} />
                             </div>
                         ) : <></>}
-                        {quote && quote.instances.length > 1 ? (<Typography>This accomodation requires switching instance mid-rental.</Typography>) : <></>}
+                        <button className="button is-black my-2" onClick={rent} title='Rent' disabled={!startDate || !endDate}>Send rent request</button>
+                        {(quote && quote.instances.length > 1) ? (
+                            <div className="notification is-info">
+                                <p>This accomodation requires switching instance mid-rental.</p>
+                            </div>
+                        ) : <></>}
                         {differentPrices() ? (
-                            <Typography>Note: the most convenient offer was already taken. We apologize for the inconvenience. May the Sun God be with you.</Typography>
+                            <div className="notification is-warning">
+                                <p>Note: the most convenient offer was already taken. We apologize for the inconvenience. May the Sun God be with you.</p>
+                            </div>
                         ) : <></>}
                     </div>
                 ) : <RouteLink variant="body2" href={'/signin?redirect='}>Login to view availability</RouteLink>

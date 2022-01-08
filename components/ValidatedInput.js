@@ -10,7 +10,7 @@ export default function ValidatedInput (props) {
     const error = props.errors[props.name];
 
     return (
-        <div className="field">
+        <div className="field" style={{width: '30em'}}>
             <label className="label">{props.label}</label>
             <div className="control">
               <input className={"input" + (error ? ' is-danger' : '')} {...relevantProps} {...(props.register(props.name))} />

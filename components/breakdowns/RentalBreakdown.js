@@ -19,7 +19,7 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
             if (approvedBy) {
                 return 'Approved'
             } else {
-                return 'Wating for approval'
+                return 'Waiting for approval'
             }
         } else if (status === 'active') {
             return 'Active'
@@ -60,8 +60,8 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
         switch (status) {
             case 'Approved':
                 return <span className="tag is-success">Approved</span>
-            case 'Wating for approval':
-                return <span className="tag is-warning">Wating for approval</span>
+            case 'Waiting for approval':
+                return <span className="tag is-warning">Waiting for approval</span>
             case 'Active':
                 return <span className="tag is-primary">Active</span>
             case 'Closed':

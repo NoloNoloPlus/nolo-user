@@ -120,6 +120,10 @@ export default function Header(props) {
               Rentals
             </a>
 
+            <a className="navbar-item" onClick={() => router.push('/profile')}>
+              Profile
+            </a>
+
           </div>
 
           <div className="navbar-end">

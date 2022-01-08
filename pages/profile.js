@@ -75,7 +75,10 @@ export default function ProfilePage () {
     return (
         <div>
             <Profile errors={errors} register={register} />
-            <button onClick={handleSubmit(updateUserInfo)}>Update</button>
+            <div className="is-flex is-justify-content-center">
+                <button className="button is-black" onClick={handleSubmit(updateUserInfo)}>Update</button>
+            </div>
+            
             <p>{message}</p>
         </div>
     )
