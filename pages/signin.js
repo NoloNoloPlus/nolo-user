@@ -23,6 +23,7 @@ import { schemas } from '../common';
 import { RouteLink } from '../components';
 import { joiResolver } from '@hookform/resolvers/joi';
 import utils from '../common/utils';
+import SelectInput from '@material-ui/core/Select/SelectInput';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -102,70 +103,29 @@ export default function SignIn() {
   const getRedirect = () => redirect ? `?redirect=${redirect}` : ''
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <Container>
-          <FormInputText
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            control={control}
-          />
-          <Typography>{errors.email?.message}</Typography>
-          <FormInputText
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            control={control}
-          />
-          <Typography>{errors.password?.message}</Typography>
-          <FormInputCheckbox name="remember" control={control} label="Remember me"/>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={handleSubmit(login)}
-          >
-            Sign In
-          </Button>
-          {serverError ? <Typography>Error: {serverError.message}</Typography> : <></>}
-          <Grid container>
-            <Grid item xs>
-              <Link variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <RouteLink href={'/signup' + getRedirect()} variant="body2">
-                {"Don't have an account? Sign Up"}
-              </RouteLink>
-            </Grid>
-          </Grid>
-        </Container>
+    <div>
+      <div className="is-flex is-flex-direction-column is-justify-content-center is-align-items-center">
+        <h1 className="title is-1 mt-3">Sign in</h1>
+        <div>
+          <input className="input" type="email" placeholder="Email"/>
+          <p>{errors.email?.message}</p>
+          <input className="input" type="password" placeholder="Password"/>
+          <p>{errors.password?.message}</p>
+          <br></br>
+          <button className="button is-black" onClick={handleSubmit(login)}>Sign In</button>
+          {serverError ? <p>Error: {serverError.message}</p> : <></>}
+          <div>
+          <div>
+            <RouteLink href={'/signup' + getRedirect()} variant="body2">
+              {"Don't have an account? Sign Up"}
+            </RouteLink>
+          </div>
+          </div>
+        </div>
       </div>
-      <Box mt={8}>
+      <div className="mt-4">
         <Copyright />
-      </Box>
-    </Container>
+      </div>
+    </div>
   );
 }
