@@ -85,9 +85,9 @@ export default function SignUp() {
   }
 
   return (
-    <div>
+    <div className="is-flex is-flex-direction-column is-align-items-center">
       <Profile register={register} errors={errors} registration={true} />
-      <button onClick={handleSubmit(signup)}>Sign Up</button>
+      <button className="button is-black" onClick={handleSubmit(signup)}>Sign Up</button>
       <a href={'/signin'}>
         Already have an account? Sign in
       </a>
