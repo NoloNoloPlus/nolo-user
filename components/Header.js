@@ -114,14 +114,29 @@ export default function Header(props) {
               Products
             </a>
 
-            <a className="navbar-item" onClick={() => router.push('/rentals')}>
-              Rentals
-            </a>
+            {
+              userId ? (
+                <div>
+                </div>
 
-            <a className="navbar-item" onClick={() => router.push('/profile')}>
-              Profile
-            </a>
+              ) : <></>
+            }
 
+            {
+              userId ? (
+                <a className="navbar-item" onClick={() => router.push('/rentals')}>
+                  Rentals
+                </a>
+              ) : <></>
+            }
+
+            {
+              userId ? (
+                <a className="navbar-item" onClick={() => router.push('/profile')}>
+                  Profile
+                </a>
+              ) : <></>
+            }
           </div>
 
           <div className="navbar-end">
