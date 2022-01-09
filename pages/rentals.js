@@ -33,6 +33,7 @@ const Rentals = () => {
 
     return (
         <div>
+            <h1 className="title is-1 has-text-centered mt-2">Your rentals</h1>
             {rentals.map((rental) => (
                 <RentalBreakdown key={rental.id} {...rental} onChange={queryRentals} />
             ))}
