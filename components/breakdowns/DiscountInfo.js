@@ -14,9 +14,9 @@ export default function DiscountInfo({ name, description, type, value }) {
     }
     
     return (
-        <div>
-            <p>{name} {formattedDiscount}</p>
-            <p>{description}</p>
+        <div className="mb-3">
+            <p className="has-text-success has-text-weight-bold">{name} {formattedDiscount}</p>
+            <p className="is-size-7">{description}</p>
         </div>
     )
 }

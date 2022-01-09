@@ -89,6 +89,10 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
                         </ListItem>
                     ))}
                     <InvoiceButton id={id} products={products} discounts={discounts} productIdToProductInfo={productIdToProductInfo} penalty={penalty} />
+                    <div className="mt-3">
+                        <EditRentalButton rentalId={id} productId={productId} productInfo={productIdToProductInfo[productId]} />
+                    </div>
+                    
                 </List>
                 { discountedPrice !== null ? (
                     <div>
@@ -114,7 +118,6 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
                 <div>
                 { discountedPrice !== null ? <Typography>Discounted price: {discountedPrice} €</Typography> : <></> }
                 </div>
-                <EditRentalButton rentalId={id} productId={productId} productInfo={productIdToProductInfo[productId]} />
             </AccordionDetails>
         </Accordion>
     )

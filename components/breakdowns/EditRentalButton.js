@@ -45,7 +45,8 @@ export default function EditRentalButton({ rentalId, productId, productInfo }) {
 
     return (
         <div>
-            <button className="button is-primary is-outlined is-fullwidth" onClick={() => setIsOpen(true)}>
+            <button className="button is-warning is-fullwidth" onClick={() => setIsOpen(true)}>
+
                 Edit Rental
             </button>
             <EditRentalModal rentalId={rentalId} productId={productId} productInfo={productInfo} isOpen={isOpen} setIsOpen={setIsOpen} onRent={editRental} />

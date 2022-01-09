@@ -93,18 +93,24 @@ export default function ProductInfo() {
             <div className="column p-6">
                 <p className="title has-text-centered">{name}</p>
                 <p className="subtitle has-text-centered">{description}</p>
-                <Carousel style={{height: '3em'}}>
-                    {
-                        images.map((image, i) => (
-                            <div key={i}>
-                                <img src={image} alt={name} />
-                                <p></p>
-                            </div>
-                        ))
-                    }
-                </Carousel>
+                <div>
+                    <Carousel showThumbs={false}>
+                        {
+                            images.map((image, i) => (
+                                <div key={i}>
+                                    <img src={image} alt={name} style={{height: '16em', width: 'auto'}}/>
+                                    <p></p>
+                                </div>
+                            ))
+                        }
+                    </Carousel>
+                </div>
+                
             </div>
-            <CreateRental className="column p-6" style={{backgroundColor: '#f8f0e3', height: '100vh'}} productId={id} productInfo={productInfo} rentLabel="Request Rental" onRent={rent} />
+            <div className="column p-6" style={{backgroundColor: '#f8f0e3', minHeight: '100vh'}}>
+                <CreateRental  productId={id} productInfo={productInfo} rentLabel="Request Rental" onRent={rent} />
+            </div>
+            
         </div>
     )
 }

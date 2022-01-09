@@ -17,10 +17,6 @@ export default function EditRentalModal({ isOpen, setIsOpen, rentalId, productId
                 <section className="modal-card-body">
                     <CreateRental rentalId={rentalId} productId={productId} productInfo={productInfo} onRent={modalOnRent} rentLabel="Edit Rental" />
                 </section>
-                <footer className="modal-card-foot">
-                    <button className="button is-success" onClick={() => setIsOpen(false)}>Save changes</button>
-                    <button className="button" onClick={() => setIsOpen(false)}>Cancel</button>
-                </footer>
             </div>
         </div>
     )

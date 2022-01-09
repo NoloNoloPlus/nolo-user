@@ -23,7 +23,6 @@ export default function ProductBreakdown( { instances, discounts, productInfo })
     return (
         <div className="p-3" style={{border: '0px solid black'}}>
             <div>
-                <h1 className="title is-1">{productInfo.name}: {totalPrice}€</h1>
             </div>
             <div>
                 <div>
@@ -35,7 +34,7 @@ export default function ProductBreakdown( { instances, discounts, productInfo })
                 </div>
                 { discountedPrice !== null ? (
                     <div>
-                        <p>Discounts:</p>
+                        <h1 className="title is-4">🎁 Discounts:</h1>
                         <div>
                             {
                                 discounts.map((discount, i) => (
@@ -47,7 +46,7 @@ export default function ProductBreakdown( { instances, discounts, productInfo })
                         </div>
                     </div>
                 ) : <></> }
-                { discountedPrice !== null ? <p>Discounted price: {discountedPrice} €</p> : <></> }
+                { discountedPrice !== null ? <h1 className="title is-3">💰 Discounted price: {discountedPrice.toFixed(2)} €</h1> : <></> }
             </div>
         </div>
     )
