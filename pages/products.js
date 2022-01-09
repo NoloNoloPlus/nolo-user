@@ -18,7 +18,8 @@ const truncate = (input, maxLength) => {
 } 
 const Products = () => {
     const router = useRouter();
-    const [products, setProducts] = useState(initialProducts)
+    const [products, setProducts] = useState(initialProducts);
+    const [search, setSearch] = useState('');
     // Use this to handle search queries
 
     useEffect(() => {
@@ -52,11 +53,31 @@ const Products = () => {
         })
     }, [router.query.q])
 
+    const filteredProducts = () => {
+        if (!search) {
+            return products;
+        }
+
+        const keywords = search.split(' ');
+
+        return products.filter((product) => {
+            let allowed = true;
+            for (const keyword of keywords) {
+                if (!product.name.toLowerCase().includes(keyword.toLowerCase())) {
+                    allowed = false;
+                }
+            }
+
+            return allowed;
+        })
+    }
+
     return (
         <div>
+            <input type="text" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} />
             <div className="is-flex is-align-items-space-around is-justify-content-space-around is-flex-wrap-wrap">
             {
-                products.map((product, index) => 
+                filteredProducts().map((product, index) => 
                     <Product name={product.name} coverImage={product.coverImage} blurb={product.blurb} id={product.id} stars={product.stars} key={'product' + index}/>
                 )
             }
