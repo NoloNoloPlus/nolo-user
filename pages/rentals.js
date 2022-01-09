@@ -13,6 +13,12 @@ const Rentals = () => {
     const [jwtAccess, setJwtAccess] = useRecoilState(jwtAccessState)
     const [jwtRefresh, setJwtRefresh] = useRecoilState(jwtRefreshState)
 
+    useEffect(() => {
+        if (!userId) {
+            router.push('/signin');
+        }
+    }, [userId]);
+
     const queryRentals = () => {
         fetch(config.api_endpoint + '/rentals/?userId=' + userId, {
             headers: {

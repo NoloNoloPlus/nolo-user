@@ -4,6 +4,8 @@ import { useRecoilState } from "recoil";
 import { jwtAccessState, jwtAuthorizationHeader, jwtRefreshState, userIdState } from "../common/auth";
 import { useForm } from "react-hook-form";
 
+import { useRouter } from "next/router";
+
 import { schemas } from "../common";
 import { joiResolver } from "@hookform/resolvers/joi";
 
@@ -14,6 +16,7 @@ import Profile from "../components/Profile";
 const defaultValues = {};
 
 export default function ProfilePage () {
+    const router = useRouter();
     const [userId, setUserId] = useRecoilState(userIdState);
     const [jwtAccess, setJwtAccess] = useRecoilState(jwtAccessState);
     const [jwtRefresh, setJwtRefresh] = useRecoilState(jwtRefreshState);
@@ -21,7 +24,11 @@ export default function ProfilePage () {
 
     const { register, formState: { errors }, handleSubmit, watch, setValue } = useForm({ defaultValues: defaultValues, mode: 'onBlur', resolver: joiResolver(schemas.editUser)});
 
-    console.log(errors)
+    useEffect(() => {
+        if (!userId) {
+            router.push('/signin');
+        }
+    }, [userId]); 
 
     const removeExtraFields = (obj) => {
         delete obj.id;
