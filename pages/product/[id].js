@@ -55,7 +55,7 @@ export default function ProductInfo() {
         })
     }, [id])
 
-    const rent = (quote) => {
+    const rent = async (quote) => {
         const formattedInstances = {};
 
         for (const [instanceId, instance] of Object.entries(quote.instances)) {
@@ -70,7 +70,7 @@ export default function ProductInfo() {
             }
         }
 
-        fetch(config.api_endpoint + '/rentals/', {
+        await fetch(config.api_endpoint + '/rentals/', {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
@@ -86,6 +86,8 @@ export default function ProductInfo() {
                 }
             })
         })
+
+        router.push('/rentals');
     }
 
     return (
