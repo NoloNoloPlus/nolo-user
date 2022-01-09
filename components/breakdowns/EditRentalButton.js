@@ -5,12 +5,12 @@ import { jwtAccessState, jwtAuthorizationHeader, jwtRefreshState } from '../../c
 import { useRecoilState } from "recoil"
 import utils from "../../common/utils"
 
-export default function EditRentalButton({ rentalId, productId, productInfo }) {
+export default function EditRentalButton({ rentalId, productId, productInfo, onChange }) {
     const [isOpen, setIsOpen] = useState(false);
     const [jwtAccess, setJwtAccess] = useRecoilState(jwtAccessState);
     const [jwtRefresh, setJwtRefresh] = useRecoilState(jwtRefreshState);
 
-    const editRental = (quote) => {
+    const editRental = async (quote) => {
         const formattedInstances = {};
 
         for (const [instanceId, instance] of Object.entries(quote.instances)) {
@@ -25,7 +25,7 @@ export default function EditRentalButton({ rentalId, productId, productInfo }) {
             }
         }
 
-        fetch(config.api_endpoint + '/rentals/' + rentalId + '/preprocessed', {
+        await fetch(config.api_endpoint + '/rentals/' + rentalId + '/preprocessed', {
             method: 'POST',
             headers: {
               'Accept': 'application/json',
@@ -41,6 +41,10 @@ export default function EditRentalButton({ rentalId, productId, productInfo }) {
                 }
             })
         })
+
+        if (onChange) {
+            onChange();
+        }
     }
 
     return (

@@ -13,7 +13,7 @@ const Rentals = () => {
     const [jwtAccess, setJwtAccess] = useRecoilState(jwtAccessState)
     const [jwtRefresh, setJwtRefresh] = useRecoilState(jwtRefreshState)
 
-    useEffect(() => {
+    const queryRentals = () => {
         fetch(config.api_endpoint + '/rentals/?userId=' + userId, {
             headers: {
                 pragma: 'no-cache',
@@ -27,12 +27,14 @@ const Rentals = () => {
             console.log(parsedResponse.results)
             setRentals(parsedResponse.results)
         })
-    }, [])
+    }
+
+    useEffect(queryRentals, [])
 
     return (
         <div>
             {rentals.map((rental) => (
-                <RentalBreakdown key={rental.id} {...rental} />
+                <RentalBreakdown key={rental.id} {...rental} onChange={queryRentals} />
             ))}
         </div>
     )

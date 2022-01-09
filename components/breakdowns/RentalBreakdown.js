@@ -11,7 +11,7 @@ import config from "../../config"
 import InvoiceButton from './InvoiceButton';
 import EditRentalButton from './EditRentalButton';
 
-export default function RentalBreakdown({ id, products, discounts, status, approvedBy, penalty }) {
+export default function RentalBreakdown({ id, products, discounts, status, approvedBy, penalty, onChange }) {
     // === Product info retrieval ===
     const [productIdToProductInfo, setProductIdToProductInfo] = useState({})
 
@@ -31,7 +31,7 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
         return 'Unknown';
     }
 
-    useEffect(() => {
+    const queryProductInfo = () => {
         for (const productId of Object.keys(products)) {
             fetch(config.api_endpoint + '/products/' + productId, {
                 headers: {
@@ -45,7 +45,17 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
                 setProductIdToProductInfo((currentProductIdToProductInfo) => ({...currentProductIdToProductInfo, [productId] : parsedResponse}))
             })
         }
-    }, [products])
+    }
+
+    useEffect(queryProductInfo, [products]);
+
+    const onRentalChanged = () => {
+        queryProductInfo();
+
+        if (onChange) {
+            onChange();
+        }
+    }
 
     // === Discounts ===
     const productList = Object.entries(products).map(([productId, product]) => ({ ...product, id: productId }))
@@ -90,9 +100,8 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
                     ))}
                     <InvoiceButton id={id} products={products} discounts={discounts} productIdToProductInfo={productIdToProductInfo} penalty={penalty} />
                     <div className="mt-3">
-                        <EditRentalButton rentalId={id} productId={productId} productInfo={productIdToProductInfo[productId]} />
+                        <EditRentalButton rentalId={id} productId={productId} productInfo={productIdToProductInfo[productId]} onChange={onRentalChanged} />
                     </div>
-                    
                 </List>
                 { discountedPrice !== null ? (
                     <div>
