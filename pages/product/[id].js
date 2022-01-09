@@ -107,7 +107,7 @@ export default function ProductInfo() {
                 </div>
                 
             </div>
-            <div className="column p-6" style={{backgroundColor: '#f8f0e3', height: '100vh'}}>
+            <div className="column p-6" style={{backgroundColor: '#f8f0e3', minHeight: '100vh'}}>
                 <CreateRental  productId={id} productInfo={productInfo} rentLabel="Request Rental" onRent={rent} />
             </div>
             
