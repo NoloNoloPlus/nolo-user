@@ -34,7 +34,7 @@ export default function ProductBreakdown( { instances, discounts, productInfo })
                 </div>
                 { discountedPrice !== null ? (
                     <div>
-                        <h1 className="title is-4">🎁 Discounts:</h1>
+                        <h1 className="title is-4">Discounts:</h1>
                         <div>
                             {
                                 discounts.map((discount, i) => (
@@ -46,7 +46,7 @@ export default function ProductBreakdown( { instances, discounts, productInfo })
                         </div>
                     </div>
                 ) : <></> }
-                { discountedPrice !== null ? <h1 className="title is-3">💰 Discounted price: {discountedPrice.toFixed(2)} €</h1> : <></> }
+                { discountedPrice !== null ? <h1 className="title is-3">Discounted price: {discountedPrice.toFixed(2)} €</h1> : <></> }
             </div>
         </div>
     )

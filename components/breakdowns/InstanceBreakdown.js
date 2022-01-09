@@ -18,7 +18,7 @@ export default function InstanceBreakdown( { dateRanges, discounts, instanceInfo
     return (
         <div className="p-3" style={{border: '0px solid black'}}>
             <div expandIcon={<ExpandMoreIcon />}>
-                <h2 className="title is-4">📦 {instanceInfo.name}: {totalPrice}€</h2>
+                <h2 className="title is-4">- {instanceInfo.name}: {totalPrice}€</h2>
             </div>
             <div>
                 <div>
