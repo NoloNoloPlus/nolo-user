@@ -179,9 +179,9 @@ const Invoice = ({ invoiceNo, emissionDate, company, address, phone, email, prod
                 const formattedDateRange = dateRange.from == dateRange.to ?
                     dateRange.from.toString() : `${dateRange.from} - ${dateRange.to}`
 
-                createRow(2, formattedDateRange, formatPrice(price));
+                createRow(2, formattedDateRange, '');
 
-                createRow(3, 'Price per day', formatPrice(dateRange.price));
+                createRow(3, 'Price per day', formatPrice(parseFloat(dateRange.price)));
                 createRow(3, 'Date range total', formatPrice(dateRangePrice(dateRange, false)));
 
                 if (dateRange.discounts.length > 0) {
