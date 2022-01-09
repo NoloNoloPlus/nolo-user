@@ -80,7 +80,7 @@ export default function ProductInfo() {
             },
             body: JSON.stringify({
                 products: {
-                    [productId]: {
+                    [id]: {
                         instances: formattedInstances
                     }
                 }
