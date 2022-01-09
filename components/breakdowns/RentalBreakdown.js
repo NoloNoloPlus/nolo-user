@@ -11,6 +11,9 @@ import config from "../../config"
 import InvoiceButton from './InvoiceButton';
 import EditRentalButton from './EditRentalButton';
 
+import { jwtAccessState, jwtAuthorizationHeader, jwtRefreshState, userIdState } from '../../common/auth'
+import { useRecoilState } from "recoil"
+
 export default function RentalBreakdown({ id, products, discounts, status, approvedBy, penalty, onChange }) {
     // === Product info retrieval ===
     const [productIdToProductInfo, setProductIdToProductInfo] = useState({})
@@ -57,6 +60,22 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
         }
     }
 
+    // Cancel Rental
+    const [jwtAccess, setJwtAccess] = useRecoilState(jwtAccessState);
+    const [jwtRefresh, setJwtRefresh] = useRecoilState(jwtRefreshState);
+
+    const cancelRental = async () => {
+        await fetch(config.api_endpoint + '/rentals/' + id, {
+            method: 'DELETE',
+            headers: {
+                'content-type': 'application/json',
+                authorization : jwtAuthorizationHeader(jwtAccess, jwtRefresh, setJwtAccess, setJwtRefresh)
+            }
+        })
+
+        onRentalChanged();
+    }
+
     // === Discounts ===
     const productList = Object.entries(products).map(([productId, product]) => ({ ...product, id: productId }))
 
@@ -100,7 +119,17 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
                     ))}
                     <InvoiceButton id={id} products={products} discounts={discounts} productIdToProductInfo={productIdToProductInfo} penalty={penalty} />
                     <div className="mt-3">
-                        <EditRentalButton rentalId={id} productId={productId} productInfo={productIdToProductInfo[productId]} onChange={onRentalChanged} />
+                        {
+                            status == 'ready' ? (
+                                <div>
+                                    <EditRentalButton rentalId={id} productId={productId} productInfo={productIdToProductInfo[productId]} onChange={onRentalChanged} />
+                                    <button onClick={cancelRental}>Cancel Rental</button>
+                                </div>
+                            ) : (
+                                <p>Cannot edit or cancel a{'aeiou'.includes(status[0]) ? 'n' : ''} {status} rental.</p>
+                            )
+                        }
+                        
                     </div>
                 </List>
                 { discountedPrice !== null ? (
