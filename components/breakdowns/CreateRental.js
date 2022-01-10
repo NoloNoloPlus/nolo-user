@@ -55,6 +55,8 @@ export default function CreateRental({ rentalId, productId, productInfo, onRent,
     useEffect(() => {
         if (!startDate || !endDate) return;
 
+        setQuote(null);
+
         fetch(config.api_endpoint + '/products/' + productId + '/quote?from=' + utils.formatBackendDate(startDate) + '&to=' + utils.formatBackendDate(endDate) + (rentalId ? `&ignoreRental=${rentalId}` : ''), {
             headers: {
                 pragma: 'no-cache',
@@ -72,6 +74,8 @@ export default function CreateRental({ rentalId, productId, productInfo, onRent,
 
     useEffect(() => {
         if (!startDate || !endDate) return;
+
+        setAvailabilityQuote(null);
 
         fetch(config.api_endpoint + '/products/' + productId + '/quote?from=' + utils.formatBackendDate(startDate) + '&to=' + utils.formatBackendDate(endDate) + '&ignoreAllRentals=true', {
             headers: {
