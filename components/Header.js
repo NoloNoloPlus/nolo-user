@@ -112,7 +112,7 @@ export default function Header({ update}) {
       <nav className="navbar is-black" role="navigation" aria-label="main navigation">
         <div className="navbar-brand">
           <a className="navbar-item" onClick={() => router.push('/')}>
-            <img src="https://github.com/NoloNoloPlus/nolo-office/blob/main/images/Nologo.png?raw=true" width="62" height="32"/>
+            <img style={{maxHeight: '100vh'}} src="https://github.com/NoloNoloPlus/nolo-office/blob/main/images/Nologo.png?raw=true" width="40" height="40"/>
           </a>
 
           <a role="button" className={isActive ? "navbar-burger is-active" : "navbar-burger"} onClick={toggleActive} aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
