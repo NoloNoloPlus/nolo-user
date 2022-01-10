@@ -85,7 +85,13 @@ export default function SignIn() {
           });
       }
     })
-    
+  }
+
+  const _handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      console.log('Enter pressed');
+      handleSubmit(login)()
+    }
   }
 
   return (
@@ -93,8 +99,8 @@ export default function SignIn() {
       <div className="is-flex is-flex-direction-column is-justify-content-center is-align-items-center">
         <h1 className="title is-1 mt-3">Sign in</h1>
         <div>
-          <ValidatedInput name="email" type="email" label="Email" placeholder="Email" register={register} errors={errors} />
-          <ValidatedInput name="password" type="password" label="Password" placeholder="Password" register={register} errors={errors} />
+          <ValidatedInput name="email" type="email" label="Email" placeholder="Email" register={register} errors={errors} onKeyDown={_handleKeyDown}/>
+          <ValidatedInput name="password" type="password" label="Password" placeholder="Password" register={register} errors={errors} onKeyDown={_handleKeyDown}/>
           <br></br>
           <button className="button is-black" onClick={handleSubmit(login)}>Sign In</button>
           {serverError ? <p>Error: {serverError.message}</p> : <></>}
