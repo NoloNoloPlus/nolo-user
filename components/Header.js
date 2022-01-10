@@ -113,6 +113,8 @@ export default function Header({ update}) {
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
           </a>
+
+          
         </div>
 
         <div id="navbarBasicExample" className={isActive ? "navbar-menu is-active" : "navbar-menu"}>
@@ -136,24 +138,27 @@ export default function Header({ update}) {
                 </a>
               ) : <></>
             }
-
-            {
-              userId ? (
-                <a className="navbar-item" onClick={() => router.push('/profile')}>
-                  Profile
-                </a>
-              ) : <></>
-            }
           </div>
-          {
-            avatarUrl ? (
-              <figure className="img is-32x32">
-                <img className="is-rounded" src={avatarUrl}/>
-              </figure>
-            ) : <></>
-          }
 
           <div className="navbar-end">
+            <div className="navbar-item">
+              {
+                userId && avatarUrl ? (
+                  <div className="is-flex is-align-items-center" style={{cursor: 'pointer'}} onClick={() => router.push('/profile')}>
+                    <figure className="image" style={{width: '40px', height: '40px'}}>
+                      <img alt="Your Avatar Image" className="is-rounded" style={{maxHeight: '30em', height: '100%', objectFit: 'cover'}} src={avatarUrl}/>
+                    </figure>
+                    <p className="ml-2">Profile</p>
+                  </div>
+                  
+                ) : userId ? <div className="is-flex is-align-items-center"  style={{cursor: 'pointer'}} onClick={() => router.push('/profile')}>
+                              <figure className="image" style={{width: '40px', height: '40px'}}>
+                                <img alt="Your Avatar Image" className="is-rounded" style={{maxHeight: '30em', height: '100%', objectFit: 'cover', cursor: 'pointer'}} src={'https://icons.iconarchive.com/icons/fasticon/dino/256/Caveman-icon.png'} onClick={() => router.push('/profile')}/>
+                              </figure>
+                              <p className="ml-2">Profile</p>
+                            </div> : <></>
+              }
+            </div>
             <div className="navbar-item">
               <div className="buttons">
                 {userId ? <a className="button is-danger" onClick={logout}>Log out</a> : <a className="button is-primary" onClick={() => router.push('/signin')}>Log in</a>}
