@@ -105,6 +105,7 @@ export default function CreateRental({ rentalId, productId, productInfo, onRent,
     }
 
     const startShouldDisableDate = (day) => {
+        day.setHours(0, 0, 0, 0);
         if (!availability) {
             return true;
         }
@@ -133,6 +134,7 @@ export default function CreateRental({ rentalId, productId, productInfo, onRent,
     }
 
     const endShouldDisableDate = (day) => {
+        day.setHours(0, 0, 0, 0);
         if (!availability) {
             return true;
         }
