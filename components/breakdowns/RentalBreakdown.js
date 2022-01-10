@@ -117,6 +117,15 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
                             <ProductBreakdown key={i} {...product} productInfo={productIdToProductInfo[product.id]} />
                         </ListItem>
                     ))}
+
+                    { penalty ? (
+                        <div className="notification is-danger is-light">
+                            <p>{penalty.message}</p>
+                            <p className="title is-4">Pentaly: {penalty.value}€</p>
+                        </div>
+
+                    ) : <></> }
+
                     <InvoiceButton id={id} products={products} discounts={discounts} productIdToProductInfo={productIdToProductInfo} penalty={penalty} />
                     <div className="mt-3">
                         {
@@ -146,13 +155,7 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
                         </List>
                     </div>
                 ) : <></> }
-                { penalty ? (
-                    <div>
-                        <p>Penalty: {penalty.message}</p>
-                        <p>{penalty.value} €</p>
-                    </div>
-                    
-                ) : <></> }
+                
                 <div>
                 { discountedPrice !== null ? <Typography>Discounted price: {discountedPrice} €</Typography> : <></> }
                 </div>
