@@ -123,7 +123,7 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
                             status == 'ready' ? (
                                 <div>
                                     <EditRentalButton rentalId={id} productId={productId} productInfo={productIdToProductInfo[productId]} onChange={onRentalChanged} />
-                                    <button onClick={cancelRental}>Cancel Rental</button>
+                                    <button className="button is-danger is-fullwidth mt-2" onClick={cancelRental}>Cancel Rental</button>
                                 </div>
                             ) : (
                                 <p>Cannot edit or cancel a{'aeiou'.includes(status[0]) ? 'n' : ''} {status} rental.</p>
