@@ -121,7 +121,7 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
                     { penalty ? (
                         <div className="notification is-danger is-light">
                             <p>{penalty.message}</p>
-                            <p className="title is-4">Pentaly: {penalty.value}€</p>
+                            <p className="title is-4">Penalty: {penalty.value}€</p>
                         </div>
 
                     ) : <></> }
