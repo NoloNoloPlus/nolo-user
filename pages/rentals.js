@@ -8,7 +8,7 @@ import RentalBreakdown from "../components/breakdowns/RentalBreakdown"
 
 const Rentals = () => {
     const router = useRouter();
-    const [rentals, setRentals] = useState([])
+    const [rentals, setRentals] = useState(null)
     const [userId, setUserId] = useRecoilState(userIdState)
     const [jwtAccess, setJwtAccess] = useRecoilState(jwtAccessState)
     const [jwtRefresh, setJwtRefresh] = useRecoilState(jwtRefreshState)
@@ -41,14 +41,17 @@ const Rentals = () => {
         <div>
             <h1 className="title is-1 has-text-centered mt-2">Your rentals</h1>
             {
-                rentals.length > 0 ?
-                <div>
-                    {
-                    rentals.map((rental) => (
-                        <RentalBreakdown key={rental.id} {...rental} onChange={queryRentals} />
-                    ))
-                    }
-                </div> : <p>No rentals. The Monkey God is displeased with you.</p>
+                rentals ? (
+                    rentals.length > 0 ? (
+                        <div>
+                            {
+                            rentals.map((rental) => (
+                                <RentalBreakdown key={rental.id} {...rental} onChange={queryRentals} />
+                            ))
+                            }
+                        </div>
+                    ) : <p>No rentals. The Monkey God is displeased with you.</p>
+                ) : <p>Loading...</p>
             }
         </div>
     )
