@@ -22,6 +22,12 @@ const userIdState = atom({
     effects_UNSTABLE: [persistAtom]
 })
 
+const avatarUrlState = atom({
+    key: 'avatarUrl',
+    default: null,
+    effects_UNSTABLE: [persistAtom]
+})
+
 const jwtAuthorizationHeader = (jwtAccess, jwtRefresh, setJwtAccess, setJwtRefresh) => {
     if (!jwtAccess) return null;
 
@@ -30,6 +36,7 @@ const jwtAuthorizationHeader = (jwtAccess, jwtRefresh, setJwtAccess, setJwtRefre
 }
 
 export {
+    avatarUrlState,
     jwtAccessState,
     jwtRefreshState,
     userIdState,

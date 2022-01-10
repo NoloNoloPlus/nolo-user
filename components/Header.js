@@ -1,17 +1,11 @@
-import React, { useState } from 'react';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import InputBase from '@material-ui/core/InputBase';
+import React, { useEffect, useState } from 'react';
 import { alpha, makeStyles } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
-import SearchIcon from '@material-ui/icons/Search';
-import { Button } from '@material-ui/core';
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil';
-import { jwtAccessState, jwtRefreshState, userIdState } from '../common/auth';
+import { avatarUrlState, jwtAccessState, jwtAuthorizationHeader, jwtRefreshState, userIdState } from '../common/auth';
 import { utils } from '../common';
+
+import config from '../config';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -68,12 +62,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header(props) {
+export default function Header({ update}) {
   const router = useRouter();
-  const classes = useStyles();
 
-  const [search, setSearch] = useState(router.query.q || '')
   const [userId, setUserId] = useRecoilState(userIdState);
+  const [avatarUrl, setAvatarUrl] = useRecoilState(avatarUrlState);
   const [jwtAccess, setJwtAccess] = useRecoilState(jwtAccessState);
   const [jwtRefresh, setJwtRefresh] = useRecoilState(jwtRefreshState);
   const [isActive, setIsActive] = useState(false);
@@ -84,14 +77,28 @@ export default function Header(props) {
 
   const logout = () => {
     setUserId(null);
+    setAvatarUrl(null);
     router.push('/');
   }
 
-  const executeSearch = (event) => {
-    event.preventDefault()
-    console.log('Searching')
-    router.push('/?q=' + encodeURI(search))
+  const queryAvatarUrl = async () => {
+    const response = await fetch(config.api_endpoint + '/users/' + userId, {
+      headers: {
+          pragma: 'no-cache',
+          'cache-control' : 'no-cache',
+          authorization : jwtAuthorizationHeader(jwtAccess, jwtRefresh, setJwtAccess, setJwtRefresh)
+      }
+    });
+
+    if (utils.success(response)) {
+      const body = await response.json();
+      console.log('Response:')
+      console.log(body)
+      setAvatarUrl(body.avatarUrl);
+    }
   }
+
+  useEffect(queryAvatarUrl, [userId]);
 
   return (
     <div>
@@ -138,6 +145,13 @@ export default function Header(props) {
               ) : <></>
             }
           </div>
+          {
+            avatarUrl ? (
+              <figure className="img is-32x32">
+                <img className="is-rounded" src={avatarUrl}/>
+              </figure>
+            ) : <></>
+          }
 
           <div className="navbar-end">
             <div className="navbar-item">

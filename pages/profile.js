@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import { useRecoilState } from "recoil";
-import { jwtAccessState, jwtAuthorizationHeader, jwtRefreshState, userIdState } from "../common/auth";
+import { avatarUrlState, jwtAccessState, jwtAuthorizationHeader, jwtRefreshState, userIdState } from "../common/auth";
 import { useForm } from "react-hook-form";
 
 import { useRouter } from "next/router";
@@ -18,6 +18,7 @@ const defaultValues = {};
 export default function ProfilePage () {
     const router = useRouter();
     const [userId, setUserId] = useRecoilState(userIdState);
+    const [avatarUrl, setAvatarUrl] = useRecoilState(avatarUrlState);
     const [jwtAccess, setJwtAccess] = useRecoilState(jwtAccessState);
     const [jwtRefresh, setJwtRefresh] = useRecoilState(jwtRefreshState);
     const [message, setMessage] = useState(null);
@@ -74,6 +75,7 @@ export default function ProfilePage () {
         });
 
         await queryUserInfo();
+        setAvatarUrl(data.avatarUrl);
         setMessage('User info updated successfully.');
     }
 
@@ -85,7 +87,6 @@ export default function ProfilePage () {
             <div className="is-flex is-justify-content-center">
                 <button className="button is-black" onClick={handleSubmit(updateUserInfo)}>Update</button>
             </div>
-            
             <p>{message}</p>
         </div>
     )
