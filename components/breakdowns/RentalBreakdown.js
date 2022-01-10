@@ -101,11 +101,25 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
         }
     }
 
+    const rentalProductName = () => {
+        const productId = productList[0]?.id;
+
+        if (!productId) {
+            return 'Unknown product';
+        }
+
+        if (productIdToProductInfo[productId]) {
+            return productIdToProductInfo[productId].name;
+        }
+
+        return 'Unknown product';
+    }
+
     return (
         <Accordion>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <div>
-                    <h1 className="title is-5 m-0">Rental n. {id}</h1>
+                    <h1 className="title is-5 m-0"> {rentalProductName()} (rental n. {id})</h1>
                     <h1 className="subtitle is-5 m-0 mb-2">Status: {renderTag(statusName())}</h1>
                 </div>
                 
