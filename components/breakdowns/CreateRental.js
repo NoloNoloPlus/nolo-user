@@ -38,7 +38,11 @@ export default function CreateRental({ rentalId, productId, productInfo, onRent,
                 for (const [instanceId, dateRanges] of Object.entries(parsedResponse)) {
                     console.log('DateRanges: ', dateRanges)
                     for (const dateRange of dateRanges) {
-                        newAvailability.push([new Date(dateRange.from), new Date(dateRange.to)])
+                        const newFrom = new Date(dateRange.from);
+                        newFrom.setHours(0, 0, 0, 0);
+                        const newTo = new Date(dateRange.to);
+                        newTo.setHours(0, 0, 0, 0);
+                        newAvailability.push([newFrom, newTo])
                     }
                 }
 
