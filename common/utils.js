@@ -87,7 +87,7 @@ const formatPrice = (price) => {
     if (price === undefined || price === null) {
         return '';
     }
-    return price.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+    return price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
 }
 
 export default {
