@@ -27,7 +27,7 @@ function applyContainsWeekendDiscount(price, dateRange, discount) {
 function applyContainsWeekendDiscounts(price, dateRange, discounts) {
     for (const discount of discounts) {
         if (discount.type === 'containsWeekend') {
-            price -= applyContainsWeekendDiscount(price, dateRange, discount);
+            price = applyContainsWeekendDiscount(price, dateRange, discount);
         }
     }
 
@@ -61,7 +61,7 @@ function dateRangePrice(dateRange, discounted) {
 
     if (discounted) {
         // Apply containsWeekend discount
-        applyContainsWeekendDiscounts(totalPrice, dateRange, dateRange.discounts);
+        totalPrice = applyContainsWeekendDiscounts(totalPrice, dateRange, dateRange.discounts);
 
         // Apply standard discounts
         totalPrice = applyStandardDiscounts(totalPrice, dateRange.discounts)
