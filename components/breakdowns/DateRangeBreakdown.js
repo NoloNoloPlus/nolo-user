@@ -1,4 +1,3 @@
-import { Accordion, AccordionDetails, AccordionSummary, List, ListItem, Typography } from "@material-ui/core"
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import DiscountInfo from "./DiscountInfo"
@@ -19,11 +18,11 @@ export default function DateRangeBreakdown( { from, to, price, discounts }) {
         <div className="p-3" style={{border: '0px solid black'}}>
             <div expandIcon={<ExpandMoreIcon />}>
                 <p>
-                    {utils.formatFrontendDate(from)} - {utils.formatFrontendDate(to)}: { discountedPrice === null ? totalPrice : discountedPrice} €
+                    {utils.formatFrontendDate(from)} - {utils.formatFrontendDate(to)}: { utils.formatPrice(discountedPrice === null ? totalPrice : discountedPrice)}
                 </p>
             </div>
             <div>
-                <p className="is-size-7">Price per day: {price}€</p>
+                <p className="is-size-7">Price per day: {utils.formatPrice(price)}</p>
                 {
                     discountedPrice !== null ? (
                         <div>
@@ -38,7 +37,7 @@ export default function DateRangeBreakdown( { from, to, price, discounts }) {
                         </div>
                     ) : <></>
                 }
-                { discountedPrice !== null ? <p>Discounted price: {discountedPrice} €</p> : <></> }
+                { discountedPrice !== null ? <p>Discounted price: {utils.formatPrice(discountedPrice)}</p> : <></> }
             </div>
             <hr></hr>
         </div>

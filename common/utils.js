@@ -84,6 +84,9 @@ const mergeDateRanges = (dateRanges) => {
 }
 
 const formatPrice = (price) => {
+    if (price === undefined || price === null) {
+        return '';
+    }
     return price.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
 }
 

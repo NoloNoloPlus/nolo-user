@@ -7,6 +7,8 @@ import DiscountInfo from "./DiscountInfo"
 
 import { productPrice } from "../../common/price";
 
+import utils from "../../common/utils";
+
 export default function ProductBreakdown( { instances, discounts, productInfo }) {
 
     productInfo = productInfo || {};
@@ -46,7 +48,7 @@ export default function ProductBreakdown( { instances, discounts, productInfo })
                         </div>
                     </div>
                 ) : <></> }
-                { discountedPrice !== null ? <h1 className="title is-3">Discounted price: {discountedPrice.toFixed(2)} €</h1> : <></> }
+                { discountedPrice !== null ? <h1 className="title is-3">Discounted price: {utils.formatPrice(discountedPrice)}</h1> : <></> }
             </div>
         </div>
     )

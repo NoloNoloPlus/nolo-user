@@ -6,6 +6,8 @@ import DiscountInfo from "./DiscountInfo"
 
 import { instancePrice } from "../../common/price";
 
+import utils from "../../common/utils";
+
 export default function InstanceBreakdown( { dateRanges, discounts, instanceInfo }) {
     instanceInfo = instanceInfo || {};
 
@@ -18,7 +20,7 @@ export default function InstanceBreakdown( { dateRanges, discounts, instanceInfo
     return (
         <div className="p-3" style={{border: '0px solid black'}}>
             <div expandIcon={<ExpandMoreIcon />}>
-                <h2 className="title is-4">- {instanceInfo.name}: {totalPrice}€</h2>
+                <h2 className="title is-4">- {instanceInfo.name}: {utils.formatPrice(totalPrice)}</h2>
             </div>
             <div>
                 <div>
@@ -42,7 +44,7 @@ export default function InstanceBreakdown( { dateRanges, discounts, instanceInfo
                         </div>
                     </div>
                 ) : <></> }
-                { discountedPrice !== null ? <p>Discounted price: {discountedPrice} €</p> : <></> }
+                { discountedPrice !== null ? <p>Discounted price: {utils.formatPrice(discountedPrice)}</p> : <></> }
             </div>
         </div>
     )

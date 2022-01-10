@@ -14,6 +14,8 @@ import EditRentalButton from './EditRentalButton';
 import { jwtAccessState, jwtAuthorizationHeader, jwtRefreshState, userIdState } from '../../common/auth'
 import { useRecoilState } from "recoil"
 
+import { utils } from '../../common';
+
 export default function RentalBreakdown({ id, products, discounts, status, approvedBy, penalty, onChange }) {
     // === Product info retrieval ===
     const [productIdToProductInfo, setProductIdToProductInfo] = useState({})
@@ -135,9 +137,8 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
                     { penalty ? (
                         <div className="notification is-danger is-light">
                             <p>{penalty.message}</p>
-                            <p className="title is-4">Penalty: {penalty.value}€</p>
+                            <p className="title is-4">Penalty: {utils.formatPrice(penalty.value)}</p>
                         </div>
-
                     ) : <></> }
 
                     <InvoiceButton id={id} products={products} discounts={discounts} productIdToProductInfo={productIdToProductInfo} penalty={penalty} />
@@ -171,7 +172,7 @@ export default function RentalBreakdown({ id, products, discounts, status, appro
                 ) : <></> }
                 
                 <div>
-                { discountedPrice !== null ? <Typography>Discounted price: {discountedPrice} €</Typography> : <></> }
+                { discountedPrice !== null ? <Typography>Discounted price: {utils.formatPrice(discountedPrice)}</Typography> : <></> }
                 </div>
             </AccordionDetails>
         </Accordion>
