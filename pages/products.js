@@ -73,8 +73,9 @@ const Products = () => {
     }
 
     return (
-        <div>
-            <input type="text" placeholder="Search" value={search} onChange={(e) => setSearch(e.target.value)} />
+        <div className="is-flex is-flex-direction-column is-align-items-center">
+            <h1 className="title mt-3">Catalogue</h1>
+            <input type="text" className="input is-black" style={{width: '20em'}} placeholder="Search for a product" value={search} onChange={(e) => setSearch(e.target.value)} />
             <div className="is-flex is-align-items-space-around is-justify-content-space-around is-flex-wrap-wrap">
             {
                 filteredProducts().map((product, index) => 
