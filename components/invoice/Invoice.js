@@ -126,7 +126,7 @@ const indentedContentStyle = (level) => {
     }
 }
   
-const Invoice = ({ invoiceNo, emissionDate, company, address, phone, email, products, discounts, penalty }) => {
+const Invoice = ({ invoiceNo, emissionDate, billingLines, products, discounts, penalty }) => {
     discounts = discounts || [];
     const chunkSize = 23;
     const formattedRows = []
@@ -267,10 +267,9 @@ const Invoice = ({ invoiceNo, emissionDate, company, address, phone, email, prod
         <Document>
             { chunks.map(chunk => (
                 <Page size="A4" style={styles.page}>
-                    {/*<Image style={styles.logo} src={logo} />*/}
                     <InvoiceTitle title='NoloNoloPlus'/>
                     <InvoiceNo invoiceNo={invoiceNo} emissionDate={emissionDate}/>
-                    <BillTo company={company} address={address} phone={phone} email={email}/>
+                    <BillTo lines={billingLines}/>
                     {chunk}
                 </Page>
             ))}

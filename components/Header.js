@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { alpha, makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router'
 import { useRecoilState } from 'recoil';
-import { avatarUrlState, jwtAccessState, jwtAuthorizationHeader, jwtRefreshState, userIdState } from '../common/auth';
+import { avatarUrlState, billingInfoState, jwtAccessState, jwtAuthorizationHeader, jwtRefreshState, userIdState } from '../common/auth';
 import { utils } from '../common';
 
 import config from '../config';
@@ -67,6 +67,7 @@ export default function Header({ update}) {
 
   const [userId, setUserId] = useRecoilState(userIdState);
   const [avatarUrl, setAvatarUrl] = useRecoilState(avatarUrlState);
+  const [billingInfo, setBillingInfo] = useRecoilState(billingInfoState);
   const [jwtAccess, setJwtAccess] = useRecoilState(jwtAccessState);
   const [jwtRefresh, setJwtRefresh] = useRecoilState(jwtRefreshState);
   const [isActive, setIsActive] = useState(false);
@@ -95,6 +96,12 @@ export default function Header({ update}) {
       console.log('Response:')
       console.log(body)
       setAvatarUrl(body.avatarUrl);
+      setBillingInfo({
+        firstName: body.firstName,
+        lastName: body.lastName,
+        company: body.company,
+        address: body.address
+      })
     }
   }
 

@@ -28,6 +28,12 @@ const avatarUrlState = atom({
     effects_UNSTABLE: [persistAtom]
 })
 
+const billingInfoState = atom({
+    key: 'billingInfo',
+    default: null,
+    effects_UNSTABLE: [persistAtom]
+})
+
 const jwtAuthorizationHeader = (jwtAccess, jwtRefresh, setJwtAccess, setJwtRefresh) => {
     if (!jwtAccess) return null;
 
@@ -37,6 +43,7 @@ const jwtAuthorizationHeader = (jwtAccess, jwtRefresh, setJwtAccess, setJwtRefre
 
 export {
     avatarUrlState,
+    billingInfoState,
     jwtAccessState,
     jwtRefreshState,
     userIdState,

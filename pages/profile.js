@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import { useRecoilState } from "recoil";
-import { avatarUrlState, jwtAccessState, jwtAuthorizationHeader, jwtRefreshState, userIdState } from "../common/auth";
+import { avatarUrlState, billingInfoState, jwtAccessState, jwtAuthorizationHeader, jwtRefreshState, userIdState } from "../common/auth";
 import { useForm } from "react-hook-form";
 
 import { useRouter } from "next/router";
@@ -19,6 +19,7 @@ export default function ProfilePage () {
     const router = useRouter();
     const [userId, setUserId] = useRecoilState(userIdState);
     const [avatarUrl, setAvatarUrl] = useRecoilState(avatarUrlState);
+    const [billingInfo, setBillingInfo] = useRecoilState(billingInfoState);
     const [jwtAccess, setJwtAccess] = useRecoilState(jwtAccessState);
     const [jwtRefresh, setJwtRefresh] = useRecoilState(jwtRefreshState);
     const [message, setMessage] = useState(null);
@@ -76,6 +77,12 @@ export default function ProfilePage () {
 
         await queryUserInfo();
         setAvatarUrl(data.avatarUrl);
+        setBillingInfo({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            company: data.company,
+            address: data.address
+        });
         setMessage('User info updated successfully.');
     }
 

@@ -13,14 +13,22 @@ const styles = StyleSheet.create({
   });
 
 
-const BillTo = ({ company, address, phone, email }) => (
-    <View style={styles.headerContainer}>
-        <Text style={styles.billTo}>Bill To:</Text>
-        <Text>{company}</Text>
-        <Text>{address}</Text>
-        <Text>{phone}</Text>
-        <Text>{email}</Text>
-    </View>
-  );
-  
-  export default BillTo
+const BillTo = ({ lines }) => {
+    if (lines && lines.length > 0) {
+        return (
+            <View style={styles.headerContainer}>
+                <Text style={styles.billTo}>Bill To:</Text>
+                {
+                    lines.map((line, index) => (
+                        <Text key={index}>{' ' + line}</Text>
+                    ))
+                }
+                <Text></Text>
+            </View>
+        )
+    } else {
+        return <></>
+    }
+};
+
+export default BillTo
