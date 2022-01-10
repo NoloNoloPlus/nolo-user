@@ -1,6 +1,4 @@
-import { Box, Button, Link, Typography } from "@material-ui/core"
 import React, { useEffect, useState } from "react"
-import { useRouter } from 'next/router'
 import config from "../../config"
 import DateFnsUtils from '@date-io/date-fns'
 import { DatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers'
@@ -10,9 +8,7 @@ import utils from "../../common/utils"
 import { RouteLink } from "../../components"
 import ProductBreakdown from "../../components/breakdowns/ProductBreakdown"
 import { productPrice } from "../../common/price"
-import ReactStars from 'react-stars'
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
-import { Carousel } from 'react-responsive-carousel';
 
 export default function CreateRental({ rentalId, productId, productInfo, onRent, rentLabel }) {
     const [jwtAccess, setJwtAccess] = useRecoilState(jwtAccessState);
@@ -23,9 +19,6 @@ export default function CreateRental({ rentalId, productId, productInfo, onRent,
     const [availability, setAvailability] = useState(null)
     const [quote, setQuote] = useState(null)
     const [availabilityQuote, setAvailabilityQuote] = useState(null);
-
-    console.log('Id: ', productId);
-    console.log('UserID: ', userId);
 
     useEffect(() => {
         if (productId && userId) {
@@ -116,6 +109,7 @@ export default function CreateRental({ rentalId, productId, productInfo, onRent,
             return true;
         }
         if (endDate) {
+            endDate.setHours(0, 0, 0, 0);
             if (day > endDate) {
                 return true;
             }
@@ -143,6 +137,7 @@ export default function CreateRental({ rentalId, productId, productInfo, onRent,
             return true;
         }
         if (startDate) {
+            startDate.setHours(0, 0, 0, 0);
             if (day < startDate) {
                 return true;
             }
