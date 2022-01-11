@@ -215,11 +215,18 @@ export default function CreateRental({ rentalId, productId, productInfo, onRent,
                             <p>This accomodation requires switching instance mid-rental.</p>
                         </div>
                     ) : <></>}
-                    {differentPrices() ? (
-                        <div className="notification is-warning">
-                            <p>Note: the most convenient offer was already taken. We apologize for the inconvenience. May the Sun God be with you.</p>
-                        </div>
-                    ) : <></>}
+                    {
+                        (quote && availabilityQuote) ? (
+                            differentPrices() ? (
+                                <div className="notification is-warning">
+                                    <p>Note: the most convenient offer was already taken. We apologize for the inconvenience. May the Sun God be with you.</p>
+                                </div>
+                            ) : (
+                                <div className="notification is-success">
+                                    <p>Note: this is the most convenient offer. You are blessed by the Sky God.</p>
+                                </div>
+                            )
+                        ) : <></>}
                 </div>
             ) : <RouteLink variant="body2" href={'/signin?redirect='}>Login to view availability</RouteLink>
             }
