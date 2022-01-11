@@ -111,8 +111,8 @@ function rentalPrice(rental, discounted) {
         totalPrice = applyStandardDiscounts(totalPrice, rental.discounts)
     }
 
-    if (rental.penalty) {
-        totalPrice += rental.penalty;
+    if (rental.penalty?.value) {
+        totalPrice += rental.penalty.value;
     }
 
     return totalPrice;
