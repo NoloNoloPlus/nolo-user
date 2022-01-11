@@ -18,7 +18,7 @@ export default function DateRangeBreakdown( { from, to, price, discounts }) {
         <div className="p-3" style={{border: '0px solid black'}}>
             <div expandIcon={<ExpandMoreIcon />}>
                 <p>
-                    {utils.formatFrontendDate(from)} - {utils.formatFrontendDate(to)}: { utils.formatPrice(discountedPrice === null ? totalPrice : discountedPrice)}
+                    {utils.formatFrontendDate(from)} - {utils.formatFrontendDate(to)}: { utils.formatPrice(totalPrice)}
                 </p>
             </div>
             <div>

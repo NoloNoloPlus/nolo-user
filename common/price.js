@@ -5,11 +5,13 @@ function applyContainsWeekendDiscount(price, dateRange, discount) {
         throw new Error('Discount type must be "containsWeekend"');
     }
 
-    for (let day = new Date(dateRange.from); day <= dateRange.to; day.setDate(day.getDate() + 1)) {
+    var to = new Date(dateRange.to);
+
+    for (let day = new Date(dateRange.from); day <= to; day.setDate(day.getDate() + 1)) {
         if (day.getDay() === 5) { // Friday
             const monday = new Date(day.getDate() + 3);
 
-            if (monday <= dateRange.to) {
+            if (monday <= to) {
                 // Apply discount
                 
                 // Sunday is free
