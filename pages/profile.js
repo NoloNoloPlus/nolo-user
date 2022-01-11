@@ -72,7 +72,7 @@ export default function ProfilePage () {
             }
         }).catch((error) => {
             console.log(error);
-            setMessage('Failed to update user info.')
+            setMessage({ type: 'error', message: 'Failed to update user info.' })
         });
 
         await queryUserInfo();
@@ -83,7 +83,7 @@ export default function ProfilePage () {
             company: data.company,
             address: data.address
         });
-        setMessage('User info updated successfully.');
+        setMessage({ type: 'success', message: 'User info updated successfully.' });
     }
 
     useEffect(queryUserInfo, []);
@@ -94,7 +94,13 @@ export default function ProfilePage () {
             <div className="is-flex is-justify-content-center">
                 <button className="button is-black" onClick={handleSubmit(updateUserInfo)}>Update</button>
             </div>
-            <p>{message}</p>
+            {
+                message ? (
+                    <div className={'notification ' + (message.type == 'success' ? 'is-success' : 'is-danger')}>
+                        <p>{message.message}</p>
+                    </div>
+                ) : <></>
+            }
         </div>
     )
 }
