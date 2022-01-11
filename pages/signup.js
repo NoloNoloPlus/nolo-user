@@ -48,18 +48,14 @@ export default function SignUp() {
   const [serverError, setServerError] = useState(null)
 
   const signup = (data) => {
+    delete data.confirmPassword;
     fetch(config.api_endpoint + '/auth/register', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: data.email,
-        password: data.password
-      })
+      body: JSON.stringify(data)
     })
     .then((response) => {
       if (utils.success(response)) {
